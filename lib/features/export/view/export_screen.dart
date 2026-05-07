@@ -43,7 +43,7 @@ class ExportScreen extends ConsumerWidget {
           child: Image.asset(
             AppAssets.splashLogo,
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) =>
+            errorBuilder: (context, error, stackTrace) =>
                 const Icon(Icons.account_balance_wallet_rounded),
           ),
         ),

@@ -37,6 +37,14 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.5.4
   drift_dev: ^2.30.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/splash.png"
+  adaptive_icon_background: "#121212"
+  adaptive_icon_foreground: "assets/splash.png"
 
 flutter:
   uses-material-design: true

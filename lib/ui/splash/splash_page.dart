@@ -68,7 +68,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                 AppAssets.splashLogo,
                 width: 200,
                 fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => const Icon(
+                errorBuilder: (context, error, stackTrace) => const Icon(
                   Icons.account_balance_wallet,
                   size: 96,
                   color: AppColors.accentDark,
