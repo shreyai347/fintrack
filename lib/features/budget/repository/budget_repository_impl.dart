@@ -24,6 +24,14 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   final AppDatabase _db;
 
+  /// Income category: not shown in budget UI and excluded from budget totals.
+  Future<Set<int>> _salaryCategoryIds() async {
+    final rows = await (_db.select(_db.categories)
+          ..where((c) => c.name.equals('Salary')))
+        .get();
+    return {for (final r in rows) r.id};
+  }
+
   @override
   Future<void> ensureMonthSeeded(String monthYear) async {
     final my = normalizeBudgetMonthYear(monthYear);
@@ -36,6 +44,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
     final cats = await _db.select(_db.categories).get();
     await _db.batch((b) {
       for (final c in cats) {
+        if (c.name == 'Salary') continue;
         b.insert(
           _db.budgets,
           BudgetsCompanion.insert(
@@ -83,9 +92,11 @@ class BudgetRepositoryImpl implements BudgetRepository {
     String monthYear,
   ) async {
     final spent = await _spentByCategoryForMonth(monthYear);
+    final skip = await _salaryCategoryIds();
     return [
       for (final r in rows)
-        BudgetModel.fromDrift(r, spent[r.categoryId] ?? 0),
+        if (!skip.contains(r.categoryId))
+          BudgetModel.fromDrift(r, spent[r.categoryId] ?? 0),
     ]..sort((a, b) => b.spentAmount.compareTo(a.spentAmount));
   }
 
@@ -134,10 +145,14 @@ class BudgetRepositoryImpl implements BudgetRepository {
   @override
   Future<Map<int, double>> limitsByCategory(String monthYear) async {
     final my = normalizeBudgetMonthYear(monthYear);
+    final skip = await _salaryCategoryIds();
     final rows = await (_db.select(_db.budgets)
           ..where((b) => b.monthYear.equals(my)))
         .get();
-    return {for (final r in rows) r.categoryId: r.limitAmount};
+    return {
+      for (final r in rows)
+        if (!skip.contains(r.categoryId)) r.categoryId: r.limitAmount,
+    };
   }
 
   @override
@@ -199,12 +214,16 @@ class BudgetRepositoryImpl implements BudgetRepository {
   @override
   Future<double> getTotalBudget(String monthYear) async {
     final my = normalizeBudgetMonthYear(monthYear);
-    final sum = _db.budgets.limitAmount.sum();
-    final q = _db.selectOnly(_db.budgets)
-      ..addColumns([sum])
-      ..where(_db.budgets.monthYear.equals(my));
-    final row = await q.getSingle();
-    return row.read(sum) ?? 0;
+    final skip = await _salaryCategoryIds();
+    final rows = await (_db.select(_db.budgets)
+          ..where((b) => b.monthYear.equals(my)))
+        .get();
+    var total = 0.0;
+    for (final r in rows) {
+      if (skip.contains(r.categoryId)) continue;
+      total += r.limitAmount;
+    }
+    return total;
   }
 }
 

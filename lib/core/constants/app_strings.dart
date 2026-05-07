@@ -67,6 +67,8 @@ abstract final class AppStrings {
   static const String transactionDetailNo = 'No';
   static const String transactionDetailNote = 'Note';
   static const String transactionDetailReceiptAttached = 'Receipt attached';
+  static const String transactionDetailViewReceipt = 'Receipt';
+  static const String viewReceipt = 'View receipt';
 
   static const String transactionsHelpTitle = 'Understanding transactions';
   static const String transactionsHelpSpendingTitle = 'Spending';

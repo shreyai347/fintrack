@@ -82,7 +82,13 @@ Future<void> persistNewTransaction(
       SnackBar(content: Text(AppStrings.transactionsSaved)),
     );
     ref.read(addTransactionWizardProvider.notifier).reset();
-    Navigator.of(context).pop();
+    ref.read(addTransactionOverlayVisibleProvider.notifier).hide();
+    if (context.mounted) {
+      final nav = Navigator.maybeOf(context);
+      if (nav != null && nav.canPop()) {
+        nav.pop();
+      }
+    }
   } catch (e) {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

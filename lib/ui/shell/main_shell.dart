@@ -9,6 +9,7 @@ import 'package:fintrack/features/dashboard/view/dashboard_screen.dart';
 import 'package:fintrack/features/settings/view/settings_screen.dart';
 import 'package:fintrack/features/transactions/view/add_transaction_screen.dart';
 import 'package:fintrack/features/transactions/view/transaction_screen.dart';
+import 'package:fintrack/features/transactions/viewmodel/transaction_provider.dart';
 
 class MainShell extends ConsumerStatefulWidget {
   const MainShell({super.key});
@@ -35,10 +36,11 @@ class _MainShellState extends ConsumerState<MainShell> {
       AppStrings.navBudget,
       AppStrings.navMore,
     ];
+    final overlayOpen = ref.watch(addTransactionOverlayVisibleProvider);
 
     return Scaffold(
       extendBody: true,
-      appBar: _tab == 0
+      appBar: _tab == 0 || overlayOpen
           ? null
           : AppBar(
               title: Text(appBarTitles[_tab]),
@@ -55,13 +57,25 @@ class _MainShellState extends ConsumerState<MainShell> {
                     ]
                   : null,
             ),
-      body: IndexedStack(
-        index: _tab,
-        children: const [
-          DashboardScreen(),
-          TransactionScreen(embedded: true),
-          BudgetScreen(embedded: true),
-          SettingsScreen(),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          IndexedStack(
+            index: _tab,
+            children: const [
+              DashboardScreen(),
+              TransactionScreen(embedded: true),
+              BudgetScreen(embedded: true),
+              SettingsScreen(),
+            ],
+          ),
+          if (overlayOpen)
+            AddTransactionScaffold(
+              onClose: () {
+                ref.read(addTransactionWizardProvider.notifier).reset();
+                ref.read(addTransactionOverlayVisibleProvider.notifier).hide();
+              },
+            ),
         ],
       ),
       floatingActionButtonLocation:
@@ -89,7 +103,7 @@ class _MainShellState extends ConsumerState<MainShell> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           onPressed: () {
-            showAddTransactionSheet(context, ref);
+            openAddTransactionOverlay(ref);
           },
           child: const Icon(
             Icons.add,
@@ -164,6 +178,10 @@ class _MainShellState extends ConsumerState<MainShell> {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
+          if (ref.read(addTransactionOverlayVisibleProvider)) {
+            ref.read(addTransactionWizardProvider.notifier).reset();
+            ref.read(addTransactionOverlayVisibleProvider.notifier).hide();
+          }
           setState(() => _tab = index);
           if (index == 2) {
             ref.read(budgetNotifierProvider.notifier).refresh();

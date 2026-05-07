@@ -42,6 +42,24 @@ abstract final class AppTheme {
           side: BorderSide(color: AppColors.borderLight, width: 0.5),
         ),
       ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        elevation: 12,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        backgroundColor: scheme.inverseSurface,
+        contentTextStyle: TextStyle(
+          color: scheme.onInverseSurface,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          height: 1.25,
+          letterSpacing: 0.15,
+        ),
+        actionTextColor: scheme.inversePrimary,
+        dismissDirection: DismissDirection.down,
+        insetPadding: const EdgeInsets.fromLTRB(16, 0, 16, 22),
+      ),
     );
   }
 
@@ -83,6 +101,24 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: AppColors.borderDark, width: 0.5),
         ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        elevation: 12,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        backgroundColor: scheme.inverseSurface,
+        contentTextStyle: TextStyle(
+          color: scheme.onInverseSurface,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          height: 1.25,
+          letterSpacing: 0.15,
+        ),
+        actionTextColor: scheme.inversePrimary,
+        dismissDirection: DismissDirection.down,
+        insetPadding: const EdgeInsets.fromLTRB(16, 0, 16, 22),
       ),
     );
   }

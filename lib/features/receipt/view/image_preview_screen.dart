@@ -9,9 +9,16 @@ import 'package:fintrack/features/receipt/repository/receipt_repository_impl.dar
 import 'package:fintrack/features/receipt/viewmodel/receipt_notifier.dart';
 
 class ImagePreviewScreen extends ConsumerStatefulWidget {
-  const ImagePreviewScreen({super.key, required this.imagePath});
+  const ImagePreviewScreen({
+    super.key,
+    required this.imagePath,
+    this.readOnly = false,
+  });
 
   final String imagePath;
+
+  /// When true (e.g. viewing a saved transaction receipt), do not delete the file on close.
+  final bool readOnly;
 
   @override
   ConsumerState<ImagePreviewScreen> createState() => _ImagePreviewScreenState();
@@ -35,6 +42,39 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.readOnly) {
+      final theme = Theme.of(context);
+      return Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: Text(AppStrings.transactionDetailViewReceipt),
+        ),
+        body: _error != null
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    _error!,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              )
+            : InteractiveViewer(
+                minScale: 0.5,
+                maxScale: 4,
+                child: Center(
+                  child: Image.file(
+                    File(widget.imagePath),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+      );
+    }
+
     final bg = AppColors.scaffoldDark;
 
     return Scaffold(

@@ -344,3 +344,17 @@ final addTransactionWizardProvider =
     NotifierProvider<AddTransactionWizardNotifier, AddTransactionSheetState>(
   AddTransactionWizardNotifier.new,
 );
+
+class AddTransactionOverlayVisible extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void show() => state = true;
+
+  void hide() => state = false;
+}
+
+final addTransactionOverlayVisibleProvider =
+    NotifierProvider<AddTransactionOverlayVisible, bool>(
+  AddTransactionOverlayVisible.new,
+);

@@ -7,6 +7,7 @@ import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
+import 'package:fintrack/features/receipt/view/image_preview_screen.dart';
 
 import '../model/category_model.dart';
 import '../viewmodel/transaction_provider.dart';
@@ -193,12 +194,35 @@ class TransactionDetailScreen extends ConsumerWidget {
                           tx.receiptPath!.trim().isNotEmpty)
                         row(
                           AppStrings.transactionsAttachReceipt,
-                          Text(
-                            AppStrings.transactionDetailReceiptAttached,
-                            style: TextStyle(
-                              color: muted,
-                              fontSize: 15,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppStrings.transactionDetailReceiptAttached,
+                                style: TextStyle(
+                                  color: titleCol,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: FilledButton.tonalIcon(
+                                  onPressed: () {
+                                    Navigator.of(context).push<void>(
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => ImagePreviewScreen(
+                                          imagePath: tx.receiptPath!.trim(),
+                                          readOnly: true,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.photo_outlined),
+                                  label: Text(AppStrings.viewReceipt),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                     ],

@@ -33,8 +33,29 @@ class CategoryModel {
     );
   }
 
-  IconData get iconData =>
-      IconData(iconCodePoint, fontFamily: 'MaterialIcons');
+  /// Uses only const [IconData] so `flutter build` can tree-shake icon fonts.
+  IconData get iconData {
+    switch (iconCodePoint) {
+      case 0xe533:
+        return const IconData(0xe533, fontFamily: 'MaterialIcons');
+      case 0xe531:
+        return const IconData(0xe531, fontFamily: 'MaterialIcons');
+      case 0xe59c:
+        return const IconData(0xe59c, fontFamily: 'MaterialIcons');
+      case 0xe237:
+        return const IconData(0xe237, fontFamily: 'MaterialIcons');
+      case 0xe3f5:
+        return const IconData(0xe3f5, fontFamily: 'MaterialIcons');
+      case 0xe40d:
+        return const IconData(0xe40d, fontFamily: 'MaterialIcons');
+      case 0xe263:
+        return const IconData(0xe263, fontFamily: 'MaterialIcons');
+      case 0xe5c4:
+        return const IconData(0xe5c4, fontFamily: 'MaterialIcons');
+      default:
+        return const IconData(0xe5c4, fontFamily: 'MaterialIcons');
+    }
+  }
 
   Color get color => colorHex.toColor();
 }

@@ -45,6 +45,18 @@ abstract final class AppColors {
   /// Donut chart third segment (matches design system blue).
   static const donutSegmentBlue = Color(0xFF60A5FA);
 
+  // Category chips / icons (seed + UI; keep in sync with app_database seeds)
+  static const catFood = Color(0xFFFF6B6B);
+  static const catTransport = Color(0xFF4ECDC4);
+  static const catShopping = Color(0xFFA78BFA);
+  static const catBills = Color(0xFFFFBE0B);
+  static const catHealth = Color(0xFF06D6A0);
+  static const catEntertainment = Color(0xFFFF6B9D);
+  static const catTravel = Color(0xFF4895EF);
+  static const catOther = Color(0xFF8D99AE);
+  /// Income / salary category (not in marketing list; kept distinct on charts).
+  static const catSalary = Color(0xFF4ADE80);
+
   // Budget bar thresholds (use in BudgetProgressBar widget later)
   // < 60%  → success/income color
   // 60-85% → accent color

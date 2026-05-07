@@ -13,18 +13,31 @@ import 'package:fintrack/features/transactions/view/add_transaction/steps/step_s
 
 import '../viewmodel/transaction_provider.dart';
 
+/// Full-screen add flow layered in [MainShell] so the bottom bar and FAB stay visible.
+void openAddTransactionOverlay(WidgetRef ref) {
+  ref.read(addTransactionWizardProvider.notifier).reset();
+  ref.read(addTransactionOverlayVisibleProvider.notifier).show();
+}
+
 Future<void> showAddTransactionSheet(BuildContext context, WidgetRef ref) async {
   ref.read(addTransactionWizardProvider.notifier).reset();
-  await Navigator.of(context, rootNavigator: true).push<void>(
+  await Navigator.of(context).push<void>(
     MaterialPageRoute<void>(
       fullscreenDialog: true,
-      builder: (ctx) => const _AddTransactionFullScreenPage(),
+      builder: (ctx) => AddTransactionScaffold(
+        onClose: () {
+          ref.read(addTransactionWizardProvider.notifier).reset();
+          Navigator.of(ctx).pop();
+        },
+      ),
     ),
   );
 }
 
-class _AddTransactionFullScreenPage extends ConsumerWidget {
-  const _AddTransactionFullScreenPage();
+class AddTransactionScaffold extends ConsumerWidget {
+  const AddTransactionScaffold({super.key, required this.onClose});
+
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +49,7 @@ class _AddTransactionFullScreenPage extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: onClose,
         ),
         title: Text(title),
       ),

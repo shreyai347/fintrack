@@ -161,7 +161,11 @@ class TransactionScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showAddTransactionSheet(context, ref);
+          if (embedded) {
+            openAddTransactionOverlay(ref);
+          } else {
+            showAddTransactionSheet(context, ref);
+          }
         },
         child: const Icon(Icons.add),
       ),

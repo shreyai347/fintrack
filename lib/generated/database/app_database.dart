@@ -19,7 +19,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -40,6 +40,9 @@ class AppDatabase extends _$AppDatabase {
             await _ensureSalaryCategory();
             await _removeTravelCategory();
           }
+          if (from < 6) {
+            await _applyCategoryPaletteV6();
+          }
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON;');
@@ -51,13 +54,13 @@ class AppDatabase extends _$AppDatabase {
       CategoriesCompanion.insert(
         name: 'Food',
         iconCodePoint: 0xe533,
-        colorHex: '#F87171',
+        colorHex: '#FF6B6B',
         isDefault: const Value(true),
       ),
       CategoriesCompanion.insert(
         name: 'Transport',
         iconCodePoint: 0xe531,
-        colorHex: '#60A5FA',
+        colorHex: '#4ECDC4',
         isDefault: const Value(true),
       ),
       CategoriesCompanion.insert(
@@ -69,19 +72,19 @@ class AppDatabase extends _$AppDatabase {
       CategoriesCompanion.insert(
         name: 'Bills',
         iconCodePoint: 0xe237,
-        colorHex: '#FBBF24',
+        colorHex: '#FFBE0B',
         isDefault: const Value(true),
       ),
       CategoriesCompanion.insert(
         name: 'Health',
         iconCodePoint: 0xe3f5,
-        colorHex: '#34D399',
+        colorHex: '#06D6A0',
         isDefault: const Value(true),
       ),
       CategoriesCompanion.insert(
         name: 'Entertainment',
         iconCodePoint: 0xe40d,
-        colorHex: '#F472B6',
+        colorHex: '#FF6B9D',
         isDefault: const Value(true),
       ),
       CategoriesCompanion.insert(
@@ -93,7 +96,7 @@ class AppDatabase extends _$AppDatabase {
       CategoriesCompanion.insert(
         name: 'Other',
         iconCodePoint: 0xe5c4,
-        colorHex: '#9CA3AF',
+        colorHex: '#8D99AE',
         isDefault: const Value(true),
       ),
     ];
@@ -118,6 +121,24 @@ class AppDatabase extends _$AppDatabase {
         isDefault: const Value(true),
       ),
     );
+  }
+
+  /// Default category palette (v6); matches [AppColors] `cat*` constants.
+  Future<void> _applyCategoryPaletteV6() async {
+    const palette = <String, String>{
+      'Food': '#FF6B6B',
+      'Transport': '#4ECDC4',
+      'Shopping': '#A78BFA',
+      'Bills': '#FFBE0B',
+      'Health': '#06D6A0',
+      'Entertainment': '#FF6B9D',
+      'Other': '#8D99AE',
+      'Salary': '#4ADE80',
+    };
+    for (final e in palette.entries) {
+      await (update(categories)..where((c) => c.name.equals(e.key)))
+          .write(CategoriesCompanion(colorHex: Value(e.value)));
+    }
   }
 
   Future<void> _removeTravelCategory() async {
