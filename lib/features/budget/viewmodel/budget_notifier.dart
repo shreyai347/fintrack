@@ -17,7 +17,9 @@ class BudgetNotifier extends Notifier<BudgetState> {
 
   @override
   BudgetState build() {
-    _monthYear ??= formatMonthYear(DateTime.now());
+    _monthYear = normalizeBudgetMonthYear(
+      _monthYear ?? formatMonthYear(DateTime.now()),
+    );
     ref.onDispose(() => _sub?.cancel());
     _attachStream();
     return const BudgetLoading();
@@ -51,13 +53,15 @@ class BudgetNotifier extends Notifier<BudgetState> {
   }
 
   Future<void> changeMonth(String monthYear) async {
-    _monthYear = monthYear;
+    _monthYear = normalizeBudgetMonthYear(monthYear);
     state = const BudgetLoading();
     _attachStream();
   }
 
   Future<void> updateLimit(int categoryId, double newLimit) async {
-    final my = _monthYear ?? formatMonthYear(DateTime.now());
+    final my = normalizeBudgetMonthYear(
+      _monthYear ?? formatMonthYear(DateTime.now()),
+    );
     await ref.read(budgetRepositoryProvider).upsert(
           BudgetsCompanion.insert(
             categoryId: categoryId,
@@ -69,7 +73,9 @@ class BudgetNotifier extends Notifier<BudgetState> {
 
   Future<void> refresh() async {
     try {
-      final my = _monthYear ?? formatMonthYear(DateTime.now());
+      final my = normalizeBudgetMonthYear(
+        _monthYear ?? formatMonthYear(DateTime.now()),
+      );
       await ref.read(budgetRepositoryProvider).ensureMonthSeeded(my);
       final list =
           await ref.read(budgetRepositoryProvider).snapshotForMonth(my);

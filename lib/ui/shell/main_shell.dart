@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/features/budget/view/budget_screen.dart';
+import 'package:fintrack/features/budget/viewmodel/budget_provider.dart';
 import 'package:fintrack/features/dashboard/view/dashboard_screen.dart';
 import 'package:fintrack/features/settings/view/settings_screen.dart';
 import 'package:fintrack/features/transactions/view/add_transaction_screen.dart';
@@ -160,6 +161,9 @@ class _MainShellState extends ConsumerState<MainShell> {
         borderRadius: BorderRadius.circular(16),
         onTap: () {
           setState(() => _tab = index);
+          if (index == 2) {
+            ref.read(budgetNotifierProvider.notifier).refresh();
+          }
         },
         child: SizedBox(
           height: 70,

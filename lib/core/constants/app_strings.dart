@@ -96,6 +96,8 @@ abstract final class AppStrings {
   static const String dashboardStatTransactions = 'Transactions';
   static const String dashboardRetry = 'Retry';
   static const String dashboardTotalSpentPrefix = 'Total spent';
+  static const String dashboardAddBudget = 'Add budget';
+  static const String dashboardAddBudgetHint = 'Per category';
   static const String dashboardBudgetLabel = 'Budget';
   static const String dashboardBudgetLeftSuffix = 'left';
   static const String dashboardFlipCompare = 'This month vs last month';

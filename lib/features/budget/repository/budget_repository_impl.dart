@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +9,16 @@ import 'package:fintrack/generated/database/app_database.dart';
 import '../model/budget_model.dart';
 import 'budget_repository.dart';
 
+/// Canonical `YYYY-MM` (month always two digits) for stable queries and keys.
+String normalizeBudgetMonthYear(String raw) {
+  final parts = raw.trim().split('-');
+  if (parts.length != 2) return raw;
+  final y = int.tryParse(parts[0]);
+  final m = int.tryParse(parts[1]);
+  if (y == null || m == null || m < 1 || m > 12) return raw;
+  return '$y-${m.toString().padLeft(2, '0')}';
+}
+
 class BudgetRepositoryImpl implements BudgetRepository {
   BudgetRepositoryImpl(this._db);
 
@@ -14,10 +26,11 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<void> ensureMonthSeeded(String monthYear) async {
+    final my = normalizeBudgetMonthYear(monthYear);
     final countExp = _db.budgets.id.count();
     final q = _db.selectOnly(_db.budgets)
       ..addColumns([countExp])
-      ..where(_db.budgets.monthYear.equals(monthYear));
+      ..where(_db.budgets.monthYear.equals(my));
     final row = await q.getSingle();
     if ((row.read(countExp) ?? 0) > 0) return;
     final cats = await _db.select(_db.categories).get();
@@ -27,7 +40,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
           _db.budgets,
           BudgetsCompanion.insert(
             categoryId: c.id,
-            monthYear: monthYear,
+            monthYear: my,
             limitAmount: 0,
           ),
         );
@@ -45,7 +58,8 @@ class BudgetRepositoryImpl implements BudgetRepository {
   }
 
   Future<Map<int, double>> _spentByCategoryForMonth(String monthYear) async {
-    final range = _monthBounds(monthYear);
+    final my = normalizeBudgetMonthYear(monthYear);
+    final range = _monthBounds(my);
     final rows = await _db.customSelect(
       '''
       SELECT category_id AS cid, SUM(amount) AS total
@@ -77,31 +91,38 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<List<BudgetModel>> snapshotForMonth(String monthYear) async {
+    final my = normalizeBudgetMonthYear(monthYear);
     final rows = await (_db.select(_db.budgets)
-          ..where((b) => b.monthYear.equals(monthYear)))
+          ..where((b) => b.monthYear.equals(my)))
         .get();
-    return _mapRows(rows, monthYear);
+    return _mapRows(rows, my);
   }
 
   @override
   Stream<List<BudgetModel>> watchByMonth(String monthYear) {
+    final my = normalizeBudgetMonthYear(monthYear);
     return Stream<List<BudgetModel>>.multi((controller) {
+      var emitGeneration = 0;
+
       Future<void> emit() async {
+        final gen = ++emitGeneration;
         try {
-          controller.add(await snapshotForMonth(monthYear));
+          final snap = await snapshotForMonth(my);
+          if (gen != emitGeneration || controller.isClosed) return;
+          controller.add(snap);
         } catch (e, st) {
-          controller.addError(e, st);
+          if (!controller.isClosed) controller.addError(e, st);
         }
       }
 
       final subB = (_db.select(_db.budgets)
-            ..where((b) => b.monthYear.equals(monthYear)))
+            ..where((b) => b.monthYear.equals(my)))
           .watch()
           .listen((_) => emit());
 
       final subT = _db.select(_db.transactions).watch().listen((_) => emit());
 
-      emit();
+      scheduleMicrotask(emit);
 
       controller.onCancel = () {
         subB.cancel();
@@ -112,23 +133,25 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<Map<int, double>> limitsByCategory(String monthYear) async {
+    final my = normalizeBudgetMonthYear(monthYear);
     final rows = await (_db.select(_db.budgets)
-          ..where((b) => b.monthYear.equals(monthYear)))
+          ..where((b) => b.monthYear.equals(my)))
         .get();
     return {for (final r in rows) r.categoryId: r.limitAmount};
   }
 
   @override
   Future<BudgetModel?> getByCategory(int categoryId, String monthYear) async {
+    final my = normalizeBudgetMonthYear(monthYear);
     final row = await (_db.select(_db.budgets)
           ..where(
             (b) =>
                 b.categoryId.equals(categoryId) &
-                b.monthYear.equals(monthYear),
+                b.monthYear.equals(my),
           ))
         .getSingleOrNull();
     if (row == null) return null;
-    final spent = await _spentByCategoryForMonth(monthYear);
+    final spent = await _spentByCategoryForMonth(my);
     return BudgetModel.fromDrift(row, spent[categoryId] ?? 0);
   }
 
@@ -140,7 +163,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
       throw ArgumentError('categoryId, monthYear, limitAmount required');
     }
     final cid = companion.categoryId.value;
-    final my = companion.monthYear.value;
+    final my = normalizeBudgetMonthYear(companion.monthYear.value);
     final lim = companion.limitAmount.value;
     await _db.into(_db.budgets).insert(
           BudgetsCompanion.insert(
@@ -175,10 +198,11 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<double> getTotalBudget(String monthYear) async {
+    final my = normalizeBudgetMonthYear(monthYear);
     final sum = _db.budgets.limitAmount.sum();
     final q = _db.selectOnly(_db.budgets)
       ..addColumns([sum])
-      ..where(_db.budgets.monthYear.equals(monthYear));
+      ..where(_db.budgets.monthYear.equals(my));
     final row = await q.getSingle();
     return row.read(sum) ?? 0;
   }

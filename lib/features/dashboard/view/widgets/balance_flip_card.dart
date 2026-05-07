@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
 import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
@@ -86,48 +87,154 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: card,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: border, width: 0.5),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Text(
-            '${AppStrings.dashboardTotalSpentPrefix} — ${widget.monthLabel}',
-            style: TextStyle(color: muted, fontSize: 13),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            CurrencyFormatter.format(widget.summary.totalSpent),
-            style: TextStyle(
-              color: title,
-              fontWeight: FontWeight.w800,
-              fontSize: 32,
-              letterSpacing: -0.5,
-            ),
-          ),
-          const SizedBox(height: 10),
-          RichText(
-            text: TextSpan(
-              style: TextStyle(color: muted, fontSize: 13),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextSpan(text: '${AppStrings.dashboardBudgetLabel} $budget · '),
-                TextSpan(
-                  text: CurrencyFormatter.format(left),
-                  style: TextStyle(color: leftColor, fontWeight: FontWeight.w600),
+                Padding(
+                  padding: const EdgeInsets.only(right: 120),
+                  child: Text(
+                    '${AppStrings.dashboardTotalSpentPrefix} — ${widget.monthLabel}',
+                    style: TextStyle(color: muted, fontSize: 13),
+                  ),
                 ),
-                TextSpan(
-                  text: ' ${AppStrings.dashboardBudgetLeftSuffix}',
-                  style: TextStyle(color: leftColor, fontWeight: FontWeight.w600),
+                const SizedBox(height: 10),
+                Text(
+                  CurrencyFormatter.format(widget.summary.totalSpent),
+                  style: TextStyle(
+                    color: title,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 32,
+                    letterSpacing: -0.5,
+                  ),
                 ),
+                const SizedBox(height: 10),
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: muted, fontSize: 13),
+                    children: [
+                      TextSpan(
+                          text: '${AppStrings.dashboardBudgetLabel} $budget · '),
+                      TextSpan(
+                        text: CurrencyFormatter.format(left),
+                        style: TextStyle(
+                            color: leftColor, fontWeight: FontWeight.w600),
+                      ),
+                      TextSpan(
+                        text: ' ${AppStrings.dashboardBudgetLeftSuffix}',
+                        style: TextStyle(
+                            color: leftColor, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                BudgetProgressBar(widget.summary.budgetUsedPercent, height: 5),
               ],
             ),
           ),
-          const SizedBox(height: 14),
-          BudgetProgressBar(widget.summary.budgetUsedPercent, height: 5),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Tooltip(
+              message: AppStrings.dashboardAddBudget,
+              child: Material(
+                color: Colors.transparent,
+                elevation: 0,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(AppRoutes.budget);
+                  },
+                  borderRadius: BorderRadius.circular(14),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          (dark ? AppColors.accentDark : AppColors.accentLight)
+                              .withValues(alpha: 0.22),
+                          (dark ? AppColors.accentDark : AppColors.accentLight)
+                              .withValues(alpha: 0.08),
+                        ],
+                      ),
+                      border: Border.all(
+                        color: (dark ? AppColors.accentDark : AppColors.accentLight)
+                            .withValues(alpha: 0.4),
+                        width: 1,
+                      ),
+                      boxShadow: dark
+                          ? null
+                          : [
+                              BoxShadow(
+                                color: (dark
+                                        ? AppColors.accentDark
+                                        : AppColors.accentLight)
+                                    .withValues(alpha: 0.12),
+                                blurRadius: 10,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.savings_outlined,
+                            size: 22,
+                            color: dark
+                                ? AppColors.accentDark
+                                : AppColors.accentLight,
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                AppStrings.dashboardAddBudget,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.1,
+                                  color: dark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.textPrimaryLight,
+                                ),
+                              ),
+                              Text(
+                                AppStrings.dashboardAddBudgetHint,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  color: muted,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

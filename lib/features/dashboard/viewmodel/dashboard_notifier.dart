@@ -11,6 +11,7 @@ import 'package:fintrack/core/constants/app_strings.dart';
 import '../../transactions/model/category_model.dart';
 import '../../transactions/model/transaction_model.dart';
 import '../../transactions/repository/category_repository_impl.dart';
+import '../../budget/viewmodel/budget_provider.dart';
 import '../model/chart_data_model.dart';
 import '../repository/dashboard_repository_impl.dart';
 import 'dashboard_state.dart';
@@ -136,5 +137,6 @@ class DashboardNotifier extends Notifier<DashboardState> {
 
   Future<void> refresh() async {
     await _fetch(showLoading: false);
+    await ref.read(budgetNotifierProvider.notifier).refresh();
   }
 }
