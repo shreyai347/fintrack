@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fintrack/core/config/app_routes.dart';
+import 'package:fintrack/core/constants/app_colors.dart';
+import 'package:fintrack/core/constants/app_strings.dart';
+
+import '../../../transactions/model/category_model.dart';
+import '../../../transactions/model/transaction_model.dart';
+import '../../../transactions/view/widgets/transaction_card.dart';
+
+class RecentTransactionsSection extends ConsumerWidget {
+  const RecentTransactionsSection({
+    super.key,
+    required this.transactions,
+    required this.categories,
+  });
+
+  final List<TransactionModel> transactions;
+  final List<CategoryModel> categories;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final title = dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
+    final muted = dark ? AppColors.textMutedDark : AppColors.textMutedLight;
+
+    CategoryModel? cat(int id) {
+      for (final c in categories) {
+        if (c.id == id) return c;
+      }
+      return null;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              AppStrings.dashboardSectionRecent,
+              style: TextStyle(
+                color: title,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(AppRoutes.transactions);
+              },
+              child: Text(
+                AppStrings.dashboardSeeAll,
+                style: TextStyle(
+                  color: dark ? AppColors.accentDark : AppColors.accentLight,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (transactions.isEmpty)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Text(
+                AppStrings.transactionsEmptyTitle,
+                style: TextStyle(color: muted),
+              ),
+            ),
+          )
+        else
+          ...transactions.map((tx) {
+            final c = cat(tx.categoryId);
+            if (c == null) return const SizedBox.shrink();
+            return TransactionCard(transaction: tx, category: c);
+          }),
+      ],
+    );
+  }
+}
