@@ -33,11 +33,13 @@ class AddTransactionStepHeader extends ConsumerWidget {
     required this.currentStep,
     required this.totalSteps,
     required this.dark,
+    this.compact = false,
   });
 
   final int currentStep;
   final int totalSteps;
   final bool dark;
+  final bool compact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,18 +52,21 @@ class AddTransactionStepHeader extends ConsumerWidget {
     final hint = dark ? AppColors.textHintDark : AppColors.textHintLight;
     return Row(
       children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: primary,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+        if (!compact) ...[
+          Text(
+            title,
+            style: TextStyle(
+              color: primary,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
-        const Spacer(),
+          const Spacer(),
+        ] else
+          const Spacer(),
         Text(
           '${currentStep + 1} / $totalSteps',
-          style: TextStyle(color: hint, fontSize: 8),
+          style: TextStyle(color: hint, fontSize: 13),
         ),
       ],
     );
@@ -90,10 +95,10 @@ class AddTransactionStepPills extends StatelessWidget {
         final active = i <= currentStep;
         return Expanded(
           child: Padding(
-            padding: EdgeInsets.only(right: i < totalSteps - 1 ? 4 : 0),
+            padding: EdgeInsets.only(right: i < totalSteps - 1 ? 6 : 0),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              height: 4,
+              height: 6,
               decoration: BoxDecoration(
                 color: active ? accent : inactive,
                 borderRadius: BorderRadius.circular(2),

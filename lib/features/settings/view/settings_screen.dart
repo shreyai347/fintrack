@@ -53,8 +53,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       child: Text(
         text.toUpperCase(),
         style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
           letterSpacing: 0.9,
           color: _accent(dark).withValues(alpha: 0.9),
         ),
@@ -214,10 +214,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ),
     );
 
+    final bottomInset =
+        MediaQuery.paddingOf(context).bottom + MediaQuery.viewPaddingOf(context).bottom;
+    const navOverlap = 96.0;
+
     return ColoredBox(
       color: bg,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        padding: EdgeInsets.fromLTRB(16, 12, 16, 24 + bottomInset + navOverlap),
         children: [
           _sectionHeader(l10n.profileSection, dark),
           _settingsCard(
@@ -227,8 +231,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 leading: Icon(Icons.badge_outlined, color: _iconColor(dark)),
-                title:
-                    Text(l10n.yourName, style: TextStyle(color: titleColor)),
+                title: Text(
+                  l10n.yourName,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 subtitle: Text(
                   displayName.isEmpty ? l10n.nameNotSetHint : displayName,
                   style: TextStyle(color: muted, fontSize: 13),
@@ -327,7 +336,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 leading:
                     Icon(Icons.palette_outlined, color: _iconColor(dark)),
-                title: Text(l10n.theme, style: TextStyle(color: titleColor)),
+                title: Text(
+                  l10n.theme,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 subtitle: Text(
                   _themeSubtitle(l10n),
                   style: TextStyle(color: muted, fontSize: 13),
@@ -340,8 +355,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 leading: Icon(Icons.language, color: _iconColor(dark)),
-                title:
-                    Text(l10n.language, style: TextStyle(color: titleColor)),
+                title: Text(
+                  l10n.language,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 subtitle: Text(
                   _languageSubtitle(),
                   style: TextStyle(color: muted, fontSize: 13),
@@ -360,8 +380,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 leading:
                     Icon(Icons.ios_share_outlined, color: _iconColor(dark)),
-                title:
-                    Text(l10n.exportData, style: TextStyle(color: titleColor)),
+                title: Text(
+                  l10n.exportData,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 subtitle: Text(
                   l10n.exportDataSubtitle,
                   style: TextStyle(color: muted, fontSize: 13),
@@ -378,7 +403,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     Icon(Icons.cloud_sync_outlined, color: _iconColor(dark)),
                 title: Text(
                   l10n.backupRestore,
-                  style: TextStyle(color: titleColor),
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 subtitle: Text(
                   l10n.backupRestoreSubtitle,
@@ -403,7 +431,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   l10n.clearAllData,
                   style: const TextStyle(
                     color: AppColors.error,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 subtitle: Text(

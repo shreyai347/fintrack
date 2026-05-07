@@ -50,7 +50,7 @@ class SpendingBreakdownCard extends StatelessWidget {
             AppStrings.dashboardByCategory,
             style: TextStyle(
               color: titleC,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               fontSize: 17,
             ),
           ),

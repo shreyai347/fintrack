@@ -41,7 +41,7 @@ class AddTransactionStepReceipt extends ConsumerWidget {
               Text(
                 CurrencyFormatter.format(w.parsedAmount),
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: primary,
                 ),
@@ -49,14 +49,14 @@ class AddTransactionStepReceipt extends ConsumerWidget {
               ),
               Text(
                 '$catName · ${DateFormatter.formatDisplay(w.selectedDate)}',
-                style: TextStyle(fontSize: 8, color: hint),
+                style: TextStyle(fontSize: 13, color: hint),
                 textAlign: TextAlign.center,
               ),
             ],
           ),
           const SizedBox(height: 14),
-          Text('Receipt photo', style: TextStyle(fontSize: 8, color: hint)),
-          const SizedBox(height: 8),
+          Text('Receipt photo', style: TextStyle(fontSize: 13, color: hint)),
+          const SizedBox(height: 10),
           if (w.receiptPath == null)
             ReceiptCapturePlaceholder(
               dark: dark,
@@ -80,7 +80,7 @@ class AddTransactionStepReceipt extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
                   'or skip this step',
-                  style: TextStyle(fontSize: 8, color: hint),
+                  style: TextStyle(fontSize: 13, color: hint),
                 ),
               ),
               Expanded(child: Divider(color: border, thickness: 0.5)),

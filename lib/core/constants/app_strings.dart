@@ -105,6 +105,14 @@ abstract final class AppStrings {
   static const String dashboardFlipLastMonth = 'Last month';
   static const String dashboardFlipVsLastMonth = 'vs last month';
   static const String dashboardDonutTopLabel = 'top';
+  static const String dashboardDonutTapHint =
+      'Tap a slice or row to see the amount spent.';
+  static const String dashboardDonutSeeAllTransactions =
+      'See all transactions';
+  static const String dashboardDonutCategoryExpenses = 'Expenses this month';
+  static const String dashboardDonutOpenDetail = 'Tap a row for details';
+  static const String dashboardDonutOthersDetail =
+      'Details for combined "Others" are in the full transaction list.';
   static const String dashboardErrorGeneric = 'Something went wrong';
   static const String dashboardAlertCriticalBody =
       'Budget nearly exhausted. Review amounts.';

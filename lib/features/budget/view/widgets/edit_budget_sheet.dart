@@ -62,19 +62,43 @@ class _EditBudgetBody extends StatefulWidget {
 
 class _EditBudgetBodyState extends State<_EditBudgetBody> {
   late final TextEditingController _controller;
+  var _formatting = false;
 
   @override
   void initState() {
     super.initState();
+    final initialPlain = widget.budget.limitAmount ==
+            widget.budget.limitAmount.roundToDouble()
+        ? widget.budget.limitAmount.toStringAsFixed(0)
+        : widget.budget.limitAmount.toString();
     _controller = TextEditingController(
-      text: widget.budget.limitAmount == widget.budget.limitAmount.roundToDouble()
-          ? widget.budget.limitAmount.toStringAsFixed(0)
-          : widget.budget.limitAmount.toString(),
+      text: CurrencyFormatter.formatIndianInputDisplay(
+        CurrencyFormatter.formatInput(initialPlain),
+      ),
     );
+    _controller.addListener(_onLimitTextChanged);
+  }
+
+  void _onLimitTextChanged() {
+    if (_formatting) return;
+    final plain = CurrencyFormatter.formatInput(
+      _controller.text.replaceAll(',', ''),
+    );
+    final formatted =
+        CurrencyFormatter.formatIndianInputDisplay(plain, allowEmpty: true);
+    if (formatted != _controller.text) {
+      _formatting = true;
+      _controller.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+      _formatting = false;
+    }
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_onLimitTextChanged);
     _controller.dispose();
     super.dispose();
   }
@@ -87,7 +111,8 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
       return;
     }
-    final normalized = CurrencyFormatter.formatInput(raw).replaceAll(',', '');
+    final normalized =
+        CurrencyFormatter.formatInput(raw.replaceAll(',', ''));
     final parsed = double.tryParse(normalized);
     if (parsed == null || parsed <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(

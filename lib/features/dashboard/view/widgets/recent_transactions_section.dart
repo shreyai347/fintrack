@@ -42,7 +42,7 @@ class RecentTransactionsSection extends ConsumerWidget {
               AppStrings.dashboardSectionRecent,
               style: TextStyle(
                 color: title,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 fontSize: 17,
               ),
             ),
@@ -68,7 +68,7 @@ class RecentTransactionsSection extends ConsumerWidget {
                 AppStrings.dashboardSeeAll,
                 style: TextStyle(
                   color: dark ? AppColors.accentDark : AppColors.accentLight,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 13,
                 ),
               ),

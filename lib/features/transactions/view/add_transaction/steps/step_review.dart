@@ -45,7 +45,7 @@ class AddTransactionStepReview extends ConsumerWidget {
 
     Widget recapRow(String label, Widget value, {bool last = false}) {
       return Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           border: last
               ? null
@@ -55,16 +55,16 @@ class AddTransactionStepReview extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 6,
-              height: 6,
-              margin: const EdgeInsets.only(top: 4, right: 8),
+              width: 8,
+              height: 8,
+              margin: const EdgeInsets.only(top: 6, right: 10),
               decoration: BoxDecoration(
                 color: accent,
                 shape: BoxShape.circle,
               ),
             ),
             Expanded(
-              child: Text(label, style: TextStyle(fontSize: 9, color: muted)),
+              child: Text(label, style: TextStyle(fontSize: 14, color: muted)),
             ),
             value,
           ],
@@ -81,7 +81,7 @@ class AddTransactionStepReview extends ConsumerWidget {
               Text(
                 CurrencyFormatter.format(w.parsedAmount),
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: primary,
                 ),
@@ -89,17 +89,17 @@ class AddTransactionStepReview extends ConsumerWidget {
               ),
               Text(
                 '${cat?.name ?? '—'} · ${DateFormatter.formatDisplay(w.selectedDate)}',
-                style: TextStyle(fontSize: 8, color: hint),
+                style: TextStyle(fontSize: 13, color: hint),
                 textAlign: TextAlign.center,
               ),
             ],
           ),
           const SizedBox(height: 14),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
               color: input,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(color: border, width: 0.5),
             ),
             child: Column(
@@ -109,7 +109,7 @@ class AddTransactionStepReview extends ConsumerWidget {
                   Text(
                     CurrencyFormatter.format(w.parsedAmount),
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: primary,
                     ),
@@ -122,7 +122,7 @@ class AddTransactionStepReview extends ConsumerWidget {
                         ? AppStrings.transactionsAmountExpense
                         : AppStrings.transactionsAmountIncome,
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: w.isExpense
                           ? (dark ? AppColors.expense : AppColors.expenseLight)
@@ -137,13 +137,13 @@ class AddTransactionStepReview extends ConsumerWidget {
                     children: [
                       if (cat != null) ...[
                         CategoryIcon(
-                            category: cat, size: 12, iconColor: primary),
-                        const SizedBox(width: 4),
+                            category: cat, size: 20, iconColor: primary),
+                        const SizedBox(width: 6),
                       ],
                       Text(
                         cat?.name ?? '—',
                         style: TextStyle(
-                          fontSize: 9,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color: primary,
                         ),
@@ -156,7 +156,7 @@ class AddTransactionStepReview extends ConsumerWidget {
                   Text(
                     DateFormatter.formatDisplay(w.selectedDate),
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: primary,
                     ),
@@ -167,32 +167,32 @@ class AddTransactionStepReview extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text('Note (optional)', style: TextStyle(fontSize: 8, color: hint)),
-          const SizedBox(height: 6),
+          Text('Note (optional)', style: TextStyle(fontSize: 14, color: hint)),
+          const SizedBox(height: 8),
           TextField(
             controller: noteController,
             onChanged: notifier.setNote,
-            maxLines: 2,
+            maxLines: 3,
             maxLength: 200,
-            style: TextStyle(fontSize: 10, color: primary),
+            style: TextStyle(fontSize: 16, color: primary),
             decoration: InputDecoration(
               filled: true,
               fillColor: input,
               counterText: '',
               hintText: 'Add a note...',
-              hintStyle: TextStyle(color: hint, fontSize: 10),
+              hintStyle: TextStyle(color: hint, fontSize: 15),
               contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: border, width: 0.5),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: border, width: 0.5),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: accent, width: 0.5),
               ),
             ),

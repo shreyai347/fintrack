@@ -31,7 +31,7 @@ class WeeklyBarChartCard extends StatelessWidget {
             AppStrings.dashboardWeeklySpending,
             style: TextStyle(
               color: title,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               fontSize: 15,
             ),
           ),

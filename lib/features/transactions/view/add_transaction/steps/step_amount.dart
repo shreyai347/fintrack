@@ -40,15 +40,15 @@ class AddTransactionStepAmount extends ConsumerWidget {
       return Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(26),
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 28),
             decoration: BoxDecoration(
               color: selected
                   ? selC.withValues(alpha: 0.12)
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(26),
               border: Border.all(
                 color: selected ? selC : border,
                 width: 1,
@@ -58,8 +58,8 @@ class AddTransactionStepAmount extends ConsumerWidget {
               label,
               style: TextStyle(
                 color: selected ? selC : muted,
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -70,23 +70,23 @@ class AddTransactionStepAmount extends ConsumerWidget {
     Widget numKey(String ch, VoidCallback onTap, {Color? fg}) {
       return Material(
         color: input,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(14),
         child: InkWell(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(14),
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 18),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(color: border, width: 0.5),
             ),
             child: Text(
               ch,
               style: TextStyle(
                 color: fg ?? primary,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -107,7 +107,7 @@ class AddTransactionStepAmount extends ConsumerWidget {
                 expense: true,
                 onTap: () => notifier.setExpense(true),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 14),
               typeChip(
                 label: AppStrings.transactionsAmountIncome,
                 selected: !w.isExpense,
@@ -120,12 +120,12 @@ class AddTransactionStepAmount extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('₹', style: TextStyle(fontSize: 18, color: hint)),
-              const SizedBox(width: 6),
+              Text('₹', style: TextStyle(fontSize: 24, color: hint)),
+              const SizedBox(width: 8),
               Text(
                 formatAmountDisplay(w.amountString),
                 style: TextStyle(
-                  fontSize: 34,
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: primary,
                 ),
@@ -136,48 +136,48 @@ class AddTransactionStepAmount extends ConsumerWidget {
           Center(
             child: Text(
               'tap to edit',
-              style: TextStyle(fontSize: 8, color: accent),
+              style: TextStyle(fontSize: 13, color: accent),
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 18),
           Column(
             children: [
               Row(
                 children: [
                   Expanded(child: numKey('1', () => notifier.appendDigit('1'))),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(child: numKey('2', () => notifier.appendDigit('2'))),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(child: numKey('3', () => notifier.appendDigit('3'))),
                 ],
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(child: numKey('4', () => notifier.appendDigit('4'))),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(child: numKey('5', () => notifier.appendDigit('5'))),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(child: numKey('6', () => notifier.appendDigit('6'))),
                 ],
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(child: numKey('7', () => notifier.appendDigit('7'))),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(child: numKey('8', () => notifier.appendDigit('8'))),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(child: numKey('9', () => notifier.appendDigit('9'))),
                 ],
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(child: numKey('.', notifier.appendDot)),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(child: numKey('0', () => notifier.appendDigit('0'))),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: numKey('⌫', notifier.backspace, fg: accent),
                   ),

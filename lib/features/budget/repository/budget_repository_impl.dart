@@ -62,7 +62,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
     final range = _monthBounds(my);
     final rows = await _db.customSelect(
       '''
-      SELECT category_id AS cid, SUM(amount) AS total
+      SELECT category_id AS cid, CAST(SUM(amount) AS REAL) AS total
       FROM transactions
       WHERE amount < 0 AND date >= ? AND date <= ?
       GROUP BY category_id
@@ -72,7 +72,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
     final map = <int, double>{};
     for (final row in rows) {
       final id = row.read<int>('cid');
-      final total = row.read<num>('total').toDouble();
+      final total = row.read<double>('total');
       map[id] = total.abs();
     }
     return map;

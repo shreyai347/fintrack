@@ -68,18 +68,19 @@ class AddTransactionBottomActions extends ConsumerWidget {
         color: nextEnabled
             ? accent
             : (dark ? AppColors.inputDark : AppColors.inputLight),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
           onTap: onPrimary,
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            constraints: const BoxConstraints(minHeight: 52),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             alignment: Alignment.center,
             child: Text(
               nextLabel,
               style: TextStyle(
                 color: nextEnabled ? AppColors.onVivid : muted,
-                fontSize: 11,
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -99,7 +100,12 @@ class AddTransactionBottomActions extends ConsumerWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: muted,
               side: BorderSide(color: border),
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              minimumSize: const Size(0, 52),
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             onPressed: notifier.prevStep,
             child: const Text('← Back'),

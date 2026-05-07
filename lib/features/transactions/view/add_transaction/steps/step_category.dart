@@ -41,7 +41,7 @@ class AddTransactionStepCategory extends ConsumerWidget {
               Text(
                 CurrencyFormatter.format(w.parsedAmount),
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: primary,
                 ),
@@ -51,18 +51,18 @@ class AddTransactionStepCategory extends ConsumerWidget {
                 w.isExpense
                     ? AppStrings.transactionsAmountExpense
                     : AppStrings.transactionsAmountIncome,
-                style: TextStyle(fontSize: 8, color: amtCol),
+                style: TextStyle(fontSize: 13, color: amtCol),
                 textAlign: TextAlign.center,
               ),
             ],
           ),
           const SizedBox(height: 16),
-          Text('Category', style: TextStyle(fontSize: 8, color: hint)),
-          const SizedBox(height: 8),
+          Text('Category', style: TextStyle(fontSize: 13, color: hint)),
+          const SizedBox(height: 12),
           cats.when(
             data: (list) => Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 10,
+              runSpacing: 10,
               children: list
                   .where(excludeSalaryCategory)
                   .map((c) {
@@ -70,16 +70,16 @@ class AddTransactionStepCategory extends ConsumerWidget {
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(24),
                     onTap: () => notifier.selectCategory(c.id),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
+                          vertical: 12, horizontal: 14),
                       decoration: BoxDecoration(
                         color: sel
                             ? accent.withValues(alpha: 0.12)
                             : Colors.transparent,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(24),
                         border: Border.all(color: sel ? accent : border),
                       ),
                       child: Row(
@@ -87,16 +87,16 @@ class AddTransactionStepCategory extends ConsumerWidget {
                         children: [
                           CategoryIcon(
                             category: c,
-                            size: 16,
+                            size: 24,
                             iconColor: sel ? accent : muted,
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 10),
                           Text(
                             c.name,
                             style: TextStyle(
                               color: sel ? accent : muted,
-                              fontSize: 8.5,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],

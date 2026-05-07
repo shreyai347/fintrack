@@ -1,3 +1,4 @@
+import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/features/transactions/model/category_model.dart';
 
 CategoryModel? categoryById(List<CategoryModel> list, int? id) {
@@ -11,6 +12,5 @@ CategoryModel? categoryById(List<CategoryModel> list, int? id) {
 bool excludeSalaryCategory(CategoryModel c) => c.name != 'Salary';
 
 String formatAmountDisplay(String raw) {
-  if (raw.isEmpty) return '0';
-  return raw;
+  return CurrencyFormatter.formatIndianInputDisplay(raw);
 }

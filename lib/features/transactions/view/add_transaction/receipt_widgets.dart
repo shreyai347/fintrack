@@ -32,23 +32,23 @@ class ReceiptCapturePlaceholder extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
             child: Column(
               children: [
-                Icon(Icons.camera_alt_outlined, size: 28, color: accent),
-                const SizedBox(height: 8),
+                Icon(Icons.camera_alt_outlined, size: 40, color: accent),
+                const SizedBox(height: 12),
                 Text(
                   'Tap to open camera',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 16,
                     color: accent,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
                   'Optional — scan your receipt',
-                  style: TextStyle(fontSize: 8, color: hint),
+                  style: TextStyle(fontSize: 13, color: hint),
                 ),
               ],
             ),
@@ -121,7 +121,7 @@ class ReceiptAttachedPreview extends StatelessWidget {
                     color: Theme.of(context).brightness == Brightness.dark
                         ? AppColors.textMutedDark
                         : AppColors.textMutedLight,
-                    fontSize: 10,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -134,7 +134,7 @@ class ReceiptAttachedPreview extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: Image.file(
                 File(path),
-                height: 80,
+                height: 112,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -149,9 +149,9 @@ class ReceiptAttachedPreview extends StatelessWidget {
                   customBorder: const CircleBorder(),
                   onTap: onClear,
                   child: const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: Icon(Icons.close, size: 9, color: AppColors.onVivid),
+                    width: 36,
+                    height: 36,
+                    child: Icon(Icons.close, size: 18, color: AppColors.onVivid),
                   ),
                 ),
               ),

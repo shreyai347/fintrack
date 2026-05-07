@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/features/transactions/view/add_transaction/bottom_actions.dart';
 import 'package:fintrack/features/transactions/view/add_transaction/persist_new_transaction.dart';
 import 'package:fintrack/features/transactions/view/add_transaction/sheet_header.dart';
@@ -14,27 +15,40 @@ import '../viewmodel/transaction_provider.dart';
 
 Future<void> showAddTransactionSheet(BuildContext context, WidgetRef ref) async {
   ref.read(addTransactionWizardProvider.notifier).reset();
-  await showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    backgroundColor: Colors.transparent,
-    builder: (ctx) {
-      final h = MediaQuery.sizeOf(ctx).height;
-      return ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        child: Container(
-          height: h * 0.95,
-          decoration: BoxDecoration(
-            color: Theme.of(ctx).scaffoldBackgroundColor,
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: const AddTransactionFlow(showDragHandle: true),
-        ),
-      );
-    },
+  await Navigator.of(context, rootNavigator: true).push<void>(
+    MaterialPageRoute<void>(
+      fullscreenDialog: true,
+      builder: (ctx) => const _AddTransactionFullScreenPage(),
+    ),
   );
+}
+
+class _AddTransactionFullScreenPage extends ConsumerWidget {
+  const _AddTransactionFullScreenPage();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final title = ref.watch(addTransactionWizardProvider).editingId != null
+        ? AppStrings.transactionsEditTitle
+        : AppStrings.transactionsNewTitle;
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(title),
+      ),
+      body: SafeArea(
+        top: false,
+        child: AddTransactionFlow(
+          showDragHandle: false,
+          embeddedInScaffoldAppBar: true,
+        ),
+      ),
+    );
+  }
 }
 
 class AddTransactionScreen extends ConsumerStatefulWidget {
@@ -64,9 +78,14 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
 }
 
 class AddTransactionFlow extends ConsumerStatefulWidget {
-  const AddTransactionFlow({super.key, required this.showDragHandle});
+  const AddTransactionFlow({
+    super.key,
+    required this.showDragHandle,
+    this.embeddedInScaffoldAppBar = false,
+  });
 
   final bool showDragHandle;
+  final bool embeddedInScaffoldAppBar;
 
   @override
   ConsumerState<AddTransactionFlow> createState() =>
@@ -155,6 +174,7 @@ class _AddTransactionFlowState extends ConsumerState<AddTransactionFlow> {
                 currentStep: w.currentStep,
                 totalSteps: totalSteps,
                 dark: dark,
+                compact: widget.embeddedInScaffoldAppBar,
               ),
               const SizedBox(height: 10),
               AddTransactionStepPills(

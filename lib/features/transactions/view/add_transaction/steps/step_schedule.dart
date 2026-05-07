@@ -44,22 +44,23 @@ class AddTransactionStepSchedule extends ConsumerWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
             onTap: () => notifier.setRecurringFrequency(value),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color:
                     sel ? accent.withValues(alpha: 0.12) : Colors.transparent,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: sel ? accent : border),
               ),
               child: Text(
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 8,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                   color: sel ? accent : muted,
                 ),
               ),
@@ -78,7 +79,7 @@ class AddTransactionStepSchedule extends ConsumerWidget {
               Text(
                 CurrencyFormatter.format(w.parsedAmount),
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: primary,
                 ),
@@ -86,19 +87,19 @@ class AddTransactionStepSchedule extends ConsumerWidget {
               ),
               Text(
                 '$catName · ${w.isExpense ? AppStrings.transactionsAmountExpense : AppStrings.transactionsAmountIncome}',
-                style: TextStyle(fontSize: 8, color: amtCol),
+                style: TextStyle(fontSize: 13, color: amtCol),
                 textAlign: TextAlign.center,
               ),
             ],
           ),
           const SizedBox(height: 16),
-          Text(AppStrings.fieldDate, style: TextStyle(fontSize: 8, color: hint)),
-          const SizedBox(height: 6),
+          Text(AppStrings.fieldDate, style: TextStyle(fontSize: 13, color: hint)),
+          const SizedBox(height: 8),
           Material(
             color: input,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(14),
             child: InkWell(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(14),
               onTap: () async {
                 final d = await showDatePicker(
                   context: context,
@@ -128,9 +129,9 @@ class AddTransactionStepSchedule extends ConsumerWidget {
               },
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 9, horizontal: 11),
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: border, width: 0.5),
                 ),
                 child: Row(
@@ -138,10 +139,10 @@ class AddTransactionStepSchedule extends ConsumerWidget {
                     Expanded(
                       child: Text(
                         DateFormatter.formatDisplay(w.selectedDate),
-                        style: TextStyle(color: primary, fontSize: 12),
+                        style: TextStyle(color: primary, fontSize: 17),
                       ),
                     ),
-                    Text('📅', style: TextStyle(color: accent, fontSize: 16)),
+                    Text('📅', style: TextStyle(color: accent, fontSize: 22)),
                   ],
                 ),
               ),
@@ -149,25 +150,25 @@ class AddTransactionStepSchedule extends ConsumerWidget {
           ),
           const SizedBox(height: 14),
           Text(AppStrings.fieldRecurring,
-              style: TextStyle(fontSize: 8, color: hint)),
-          const SizedBox(height: 8),
+              style: TextStyle(fontSize: 13, color: hint)),
+          const SizedBox(height: 10),
           Row(
             children: [
               freqChip('none', AppStrings.transactionsRecurringNone),
-              const SizedBox(width: 6),
+              const SizedBox(width: 8),
               freqChip('daily', AppStrings.transactionsRecurringDaily),
-              const SizedBox(width: 6),
+              const SizedBox(width: 8),
               freqChip('weekly', AppStrings.transactionsRecurringWeekly),
-              const SizedBox(width: 6),
+              const SizedBox(width: 8),
               freqChip('monthly', AppStrings.transactionsRecurringMonthly),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
             decoration: BoxDecoration(
               color: input,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(color: border, width: 0.5),
             ),
             child: Column(
@@ -175,12 +176,12 @@ class AddTransactionStepSchedule extends ConsumerWidget {
               children: [
                 Text(
                   'Recurring info',
-                  style: TextStyle(fontSize: 8, color: hint),
+                  style: TextStyle(fontSize: 13, color: hint),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
                   'Set to repeat this transaction automatically at the selected frequency.',
-                  style: TextStyle(fontSize: 8.5, color: muted),
+                  style: TextStyle(fontSize: 13, height: 1.35, color: muted),
                 ),
               ],
             ),

@@ -142,7 +142,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
             style: TextStyle(
               color:
                   dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               fontSize: 15,
             ),
           ),

@@ -96,6 +96,7 @@ class TransactionScreen extends ConsumerWidget {
                               .textTheme
                               .titleSmall
                               ?.copyWith(
+                                fontWeight: FontWeight.w700,
                                 color: dark
                                     ? AppColors.accentDark
                                     : AppColors.accentLight,

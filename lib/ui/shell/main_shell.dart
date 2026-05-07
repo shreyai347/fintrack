@@ -155,6 +155,10 @@ class _MainShellState extends ConsumerState<MainShell> {
     required int index,
   }) {
     final isSelected = _tab == index;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final unselected = dark
+        ? const Color(0xFF94A3B8)
+        : const Color(0xFF475569);
 
     return Expanded(
       child: InkWell(
@@ -176,9 +180,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                 child: Icon(
                   icon,
                   size: 26,
-                  color: isSelected
-                      ? _selectedColors[index]
-                      : Colors.grey.shade500,
+                  color: isSelected ? _selectedColors[index] : unselected,
                 ),
               ),
               const SizedBox(height: 4),
@@ -187,10 +189,8 @@ class _MainShellState extends ConsumerState<MainShell> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight:
-                      isSelected ? FontWeight.w700 : FontWeight.w500,
-                  color: isSelected
-                      ? _selectedColors[index]
-                      : Colors.grey.shade500,
+                      isSelected ? FontWeight.w700 : FontWeight.w600,
+                  color: isSelected ? _selectedColors[index] : unselected,
                 ),
                 child: Text(label),
               ),

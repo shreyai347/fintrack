@@ -18,6 +18,7 @@ import 'dashboard_state.dart';
 
 class DashboardNotifier extends Notifier<DashboardState> {
   StreamSubscription<List<TransactionModel>>? _sub;
+  int _fetchToken = 0;
 
   bool _isDark() {
     final m = ref.read(themeModeNotifierProvider);
@@ -37,17 +38,13 @@ class DashboardNotifier extends Notifier<DashboardState> {
     return const DashboardLoading();
   }
 
-  void _onRecent(List<TransactionModel> recent) {
-    final s = state;
-    if (s is! DashboardLoaded) return;
-    state = DashboardLoaded(
-      s.summary.copyWith(recentTransactions: recent),
-      s.segments,
-      s.weeklyData,
-    );
+  void _onRecent(List<TransactionModel> _) {
+    if (state is! DashboardLoaded) return;
+    scheduleMicrotask(() => _fetch(showLoading: false));
   }
 
   Future<void> _fetch({required bool showLoading}) async {
+    final token = ++_fetchToken;
     if (showLoading) {
       state = const DashboardLoading();
     }
@@ -60,8 +57,10 @@ class DashboardNotifier extends Notifier<DashboardState> {
       final cats = await ref.read(categoryRepositoryProvider).getAll();
       final segments =
           _buildSegments(summary.spentByCategory, cats, _isDark());
+      if (token != _fetchToken) return;
       state = DashboardLoaded(summary, segments, weekly);
     } catch (e) {
+      if (token != _fetchToken) return;
       state = DashboardError('$e');
     }
   }
