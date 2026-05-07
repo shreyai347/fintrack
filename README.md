@@ -446,7 +446,7 @@ widgets. Models have no Flutter imports — pure Dart.
 
 ```bash
 # 1. Clone the repo
-git clone <repo-url>
+git clone https://github.com/shreyai347/fintrack
 cd fintrack
 
 # 2. Install dependencies
