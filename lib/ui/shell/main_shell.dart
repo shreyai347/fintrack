@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/features/budget/view/budget_screen.dart';
 import 'package:fintrack/features/dashboard/view/dashboard_screen.dart';
@@ -27,9 +28,9 @@ class _MainShellState extends ConsumerState<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final titles = [
+    final appBarTitles = [
       AppStrings.navHome,
-      AppStrings.navTxns,
+      AppStrings.navTransactions,
       AppStrings.navBudget,
       AppStrings.navMore,
     ];
@@ -39,7 +40,19 @@ class _MainShellState extends ConsumerState<MainShell> {
       appBar: _tab == 0
           ? null
           : AppBar(
-              title: Text(titles[_tab]),
+              title: Text(appBarTitles[_tab]),
+              actions: _tab == 1
+                  ? [
+                      IconButton(
+                        icon: const Icon(Icons.info_outline),
+                        tooltip: AppStrings.transactionsHelpTitle,
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.transactionsHelp);
+                        },
+                      ),
+                    ]
+                  : null,
             ),
       body: IndexedStack(
         index: _tab,
@@ -65,7 +78,7 @@ class _MainShellState extends ConsumerState<MainShell> {
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xff5B5FEF).withOpacity(0.35),
+              color: const Color(0xff5B5FEF).withValues(alpha: 0.35),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),
@@ -93,7 +106,7 @@ class _MainShellState extends ConsumerState<MainShell> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 20,
               offset: const Offset(0, -4),
             ),

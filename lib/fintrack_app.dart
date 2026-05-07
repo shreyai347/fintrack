@@ -14,7 +14,9 @@ import 'package:fintrack/features/receipt/view/camera_screen.dart';
 import 'package:fintrack/features/settings/view/settings_screen.dart';
 import 'features/transactions/view/add_transaction_screen.dart';
 import 'features/transactions/view/edit_transaction_screen.dart';
+import 'features/transactions/view/transaction_detail_screen.dart';
 import 'features/transactions/view/transaction_screen.dart';
+import 'features/transactions/view/transactions_info_screen.dart';
 import 'l10n/app_localizations.dart';
 import 'ui/splash/splash_page.dart';
 
@@ -40,6 +42,13 @@ class FintrackApp extends ConsumerWidget {
           themeMode: themeMode,
           initialRoute: AppRoutes.splash,
           onGenerateRoute: (settings) {
+            if (settings.name == AppRoutes.transactionDetail) {
+              final id = settings.arguments! as int;
+              return MaterialPageRoute<void>(
+                builder: (_) => TransactionDetailScreen(transactionId: id),
+                settings: settings,
+              );
+            }
             if (settings.name == AppRoutes.editTransaction) {
               final id = settings.arguments! as int;
               return MaterialPageRoute<void>(
@@ -63,6 +72,7 @@ class FintrackApp extends ConsumerWidget {
             AppRoutes.budget: (_) => const BudgetScreen(),
             AppRoutes.settings: (_) => const SettingsScreen(),
             AppRoutes.export: (_) => const ExportScreen(),
+            AppRoutes.transactionsHelp: (_) => const TransactionsInfoScreen(),
           },
         );
       },

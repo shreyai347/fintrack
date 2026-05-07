@@ -30,7 +30,7 @@ Future<void> showAddTransactionSheet(BuildContext context, WidgetRef ref) async 
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(24)),
           ),
-          child: const AddTransactionSheet(),
+          child: const AddTransactionFlow(showDragHandle: true),
         ),
       );
     },
@@ -63,15 +63,17 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
   }
 }
 
-class AddTransactionSheet extends ConsumerStatefulWidget {
-  const AddTransactionSheet({super.key});
+class AddTransactionFlow extends ConsumerStatefulWidget {
+  const AddTransactionFlow({super.key, required this.showDragHandle});
+
+  final bool showDragHandle;
 
   @override
-  ConsumerState<AddTransactionSheet> createState() =>
-      _AddTransactionSheetState();
+  ConsumerState<AddTransactionFlow> createState() =>
+      _AddTransactionFlowState();
 }
 
-class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
+class _AddTransactionFlowState extends ConsumerState<AddTransactionFlow> {
   late PageController _pageController;
   late bool _pageControllerExpenseMode;
   late final TextEditingController _noteController;
@@ -143,7 +145,7 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet> {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AddTransactionSheetHandle(dark: dark),
+        if (widget.showDragHandle) AddTransactionSheetHandle(dark: dark),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(

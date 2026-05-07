@@ -37,10 +37,10 @@ class SpendingBreakdownCard extends StatelessWidget {
     final top = entries.take(5).toList();
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: card,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: border, width: 0.5),
       ),
       child: Column(
@@ -51,10 +51,10 @@ class SpendingBreakdownCard extends StatelessWidget {
             style: TextStyle(
               color: titleC,
               fontWeight: FontWeight.w600,
-              fontSize: 15,
+              fontSize: 17,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           ...top.map((e) {
             final c = cat(e.key);
             final budget = summary.budgetByCategory[e.key] ?? 1;
@@ -70,15 +70,16 @@ class SpendingBreakdownCard extends StatelessWidget {
             }
             final almost = raw >= 0.85;
             return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.only(bottom: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
                       Container(
-                        width: 22,
-                        height: 22,
+                        width: 32,
+                        height: 32,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: c?.color ?? muted,
                           shape: BoxShape.circle,
@@ -86,38 +87,44 @@ class SpendingBreakdownCard extends StatelessWidget {
                         child: c != null
                             ? CategoryIcon(
                                 category: c,
-                                size: 14,
+                                size: 18,
                                 iconColor: AppColors.onVivid,
                               )
                             : null,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           c?.name ?? '—',
-                          style: TextStyle(color: titleC, fontSize: 14),
+                          style: TextStyle(
+                            color: titleC,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       Text(
                         '$pctDisplay%',
                         style: TextStyle(
                           color: pctColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
-                  BudgetProgressBar(raw, height: 4),
+                  const SizedBox(height: 10),
+                  BudgetProgressBar(raw, height: 6),
                   if (almost)
                     Padding(
-                      padding: const EdgeInsets.only(top: 4),
+                      padding: const EdgeInsets.only(top: 6),
                       child: Text(
                         AppStrings.almostFull,
                         style: TextStyle(
-                          color: dark ? AppColors.expense : AppColors.expenseLight,
-                          fontSize: 11,
+                          color:
+                              dark ? AppColors.expense : AppColors.expenseLight,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

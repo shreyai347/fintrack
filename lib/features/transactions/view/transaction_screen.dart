@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
 import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
@@ -24,6 +25,8 @@ class TransactionScreen extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider);
     final dark = Theme.of(context).brightness == Brightness.dark;
     final bg = dark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
+    final border = dark ? AppColors.borderDark : AppColors.borderLight;
+    final cardBg = dark ? AppColors.cardDark : AppColors.cardLight;
 
     final body = RefreshIndicator(
       onRefresh: () async {
@@ -86,15 +89,14 @@ class TransactionScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 12, bottom: 4),
+                        padding: const EdgeInsets.only(top: 12, bottom: 8),
                         child: Text(
                           DateFormatter.formatGroupHeader(day),
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
                               ?.copyWith(
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
+                                color: dark
                                     ? AppColors.accentDark
                                     : AppColors.accentLight,
                               ),
@@ -103,9 +105,27 @@ class TransactionScreen extends ConsumerWidget {
                       ...txs.map((tx) {
                         final cat = map[tx.categoryId];
                         if (cat == null) return const SizedBox.shrink();
-                        return TransactionCard(
-                          transaction: tx,
-                          category: cat,
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Card(
+                              elevation: 0,
+                              color: cardBg,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(
+                                  color: border,
+                                  width: 0.5,
+                                ),
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: TransactionCard(
+                                transaction: tx,
+                                category: cat,
+                              ),
+                            ),
+                          ),
                         );
                       }),
                     ],
@@ -128,6 +148,15 @@ class TransactionScreen extends ConsumerWidget {
       backgroundColor: bg,
       appBar: AppBar(
         title: Text(AppStrings.navTransactions),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: AppStrings.transactionsHelpTitle,
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.transactionsHelp);
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

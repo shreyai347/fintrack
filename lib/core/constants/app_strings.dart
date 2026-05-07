@@ -47,6 +47,7 @@ abstract final class AppStrings {
   static const String transactionsRecurringDaily = 'Daily';
   static const String transactionsRecurringWeekly = 'Weekly';
   static const String transactionsRecurringMonthly = 'Monthly';
+  static const String transactionsNewTitle = 'New transaction';
   static const String transactionsEditTitle = 'Edit transaction';
   static const String transactionsDelete = 'Delete';
   static const String transactionsDeleteConfirmTitle = 'Delete transaction?';
@@ -56,7 +57,32 @@ abstract final class AppStrings {
       'Salary category is not available. Try updating the app.';
   static const String transactionsCancel = 'Cancel';
   static const String transactionNotFound = 'Transaction not found';
+  static const String transactionDetailTitle = 'Transaction details';
+  static const String transactionDetailAmount = 'Amount';
+  static const String transactionDetailCategory = 'Category';
+  static const String transactionDetailDate = 'Date';
+  static const String transactionDetailType = 'Type';
+  static const String transactionDetailRecurring = 'Recurring';
+  static const String transactionDetailYes = 'Yes';
+  static const String transactionDetailNo = 'No';
+  static const String transactionDetailNote = 'Note';
+  static const String transactionDetailReceiptAttached = 'Receipt attached';
 
+  static const String transactionsHelpTitle = 'Understanding transactions';
+  static const String transactionsHelpSpendingTitle = 'Spending';
+  static const String transactionsHelpSpendingBody =
+      'Spending records money going out — purchases, bills, and day‑to‑day expenses. '
+      'Each entry is negative in your totals and counts toward budgets and category breakdowns.';
+  static const String transactionsHelpIncomeTitle = 'Income & salary';
+  static const String transactionsHelpIncomeBody =
+      'Income is money coming in (for example salary). Salary is a category used for '
+      'regular pay so you can separate it from one‑off income. Income appears as positive '
+      'amounts and is not treated as “spent”.';
+  static const String transactionsHelpRecurringTitle = 'Recurring';
+  static const String transactionsHelpRecurringBody =
+      'A recurring transaction repeats on a schedule you pick (daily, weekly, or monthly). '
+      'The app can use this to remind you or generate future entries. Turn it off anytime '
+      'to make the line a one‑time transaction.';
   static const String transactionsEmptyTitle = 'No transactions yet';
   static const String transactionsEmptySubtitle = 'Tap + to add your first one';
   static const String chartOthers = 'Others';

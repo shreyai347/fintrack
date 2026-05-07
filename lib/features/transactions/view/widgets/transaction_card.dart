@@ -88,37 +88,42 @@ class TransactionCard extends ConsumerWidget {
         child: InkWell(
           onTap: () {
             Navigator.of(context).pushNamed(
-              AppRoutes.editTransaction,
+              AppRoutes.transactionDetail,
               arguments: transaction.id,
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
             child: Row(
               children: [
                 CircleAvatar(
+                  radius: 30,
                   backgroundColor: category.color,
                   child: CategoryIcon(
                     category: category,
-                    size: 28,
+                    size: 32,
                     iconColor: AppColors.onVivid,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         _transactionLineTitle(transaction.note),
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: dark
+                                  ? AppColors.textPrimaryDark
+                                  : AppColors.textPrimaryLight,
+                            ),
                       ),
+                      const SizedBox(height: 4),
                       Text(
                         category.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontSize: 15,
                               color: dark
                                   ? AppColors.textMutedDark
                                   : AppColors.textMutedLight,
@@ -129,10 +134,11 @@ class TransactionCard extends ConsumerWidget {
                 ),
                 Text(
                   CurrencyFormatter.format(transaction.amount),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(color: amtColor, fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: amtColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17,
+                      ),
                 ),
               ],
             ),

@@ -33,34 +33,55 @@ Future<void> persistNewTransaction(
   };
   final repo = ref.read(transactionRepositoryProvider);
   try {
-    int? ruleId;
+    int? ruleId = w.baselineRecurringRuleId;
     if (recurring != null) {
-      ruleId = await repo.addRecurringRule(
+      ruleId ??= await repo.addRecurringRule(
         RecurringRulesCompanion.insert(
           frequency: recurring.name,
           nextDueDate: w.selectedDate,
           isActive: const Value(true),
         ),
       );
+    } else {
+      ruleId = null;
     }
-    final companion = TransactionsCompanion.insert(
-      amount: amountForDb,
-      categoryId: w.selectedCategoryId!,
-      note: Value(noteController.text.trim().isEmpty
-          ? null
-          : noteController.text.trim()),
-      date: w.selectedDate,
-      receiptPath: Value(w.receiptPath),
-      isRecurring: Value(recurring != null),
-      recurringRuleId: Value<int?>(ruleId),
-    );
-    await ref.read(transactionNotifierProvider.notifier).addTransaction(
-          companion,
-        );
+
+    final noteTrimmed = noteController.text.trim().isEmpty
+        ? null
+        : noteController.text.trim();
+
+    if (w.editingId != null) {
+      await ref.read(transactionNotifierProvider.notifier).updateTransaction(
+            TransactionsCompanion(
+              id: Value(w.editingId!),
+              amount: Value(amountForDb),
+              categoryId: Value(w.selectedCategoryId!),
+              note: Value(noteTrimmed),
+              date: Value(w.selectedDate),
+              receiptPath: Value(w.receiptPath),
+              isRecurring: Value(recurring != null),
+              recurringRuleId: Value<int?>(ruleId),
+            ),
+          );
+    } else {
+      final companion = TransactionsCompanion.insert(
+        amount: amountForDb,
+        categoryId: w.selectedCategoryId!,
+        note: Value(noteTrimmed),
+        date: w.selectedDate,
+        receiptPath: Value(w.receiptPath),
+        isRecurring: Value(recurring != null),
+        recurringRuleId: Value<int?>(ruleId),
+      );
+      await ref.read(transactionNotifierProvider.notifier).addTransaction(
+            companion,
+          );
+    }
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppStrings.transactionsSaved)),
     );
+    ref.read(addTransactionWizardProvider.notifier).reset();
     Navigator.of(context).pop();
   } catch (e) {
     if (context.mounted) {

@@ -6,7 +6,6 @@ import '../model/category_model.dart';
 import '../model/recurring_transaction_model.dart';
 import '../model/transaction_model.dart';
 import '../repository/category_repository_impl.dart';
-import '../repository/transaction_repository_impl.dart';
 import 'transaction_notifier.dart';
 import 'transaction_state.dart';
 
@@ -20,8 +19,15 @@ final categoriesProvider = StreamProvider<List<CategoryModel>>((ref) {
 });
 
 final transactionByIdProvider =
-    FutureProvider.family<TransactionModel?, int>((ref, id) async {
-  return ref.watch(transactionRepositoryProvider).getById(id);
+    Provider.family<TransactionModel?, int>((ref, id) {
+  final state = ref.watch(transactionNotifierProvider);
+  if (state is TransactionLoaded) {
+    for (final t in state.transactions) {
+      if (t.id == id) return t;
+    }
+    return null;
+  }
+  return null;
 });
 
 class TransactionWizardState {
@@ -163,6 +169,8 @@ class AddTransactionSheetState {
     this.recurringFrequency = 'none',
     this.receiptPath,
     this.note = '',
+    this.editingId,
+    this.baselineRecurringRuleId,
   });
 
   final int currentStep;
@@ -173,6 +181,8 @@ class AddTransactionSheetState {
   final String recurringFrequency;
   final String? receiptPath;
   final String note;
+  final int? editingId;
+  final int? baselineRecurringRuleId;
 
   double get parsedAmount => double.tryParse(amountString) ?? 0.0;
 
@@ -187,6 +197,9 @@ class AddTransactionSheetState {
     String? receiptPath,
     bool clearReceipt = false,
     String? note,
+    int? editingId,
+    int? baselineRecurringRuleId,
+    bool clearEditing = false,
   }) {
     return AddTransactionSheetState(
       currentStep: currentStep ?? this.currentStep,
@@ -199,6 +212,10 @@ class AddTransactionSheetState {
       recurringFrequency: recurringFrequency ?? this.recurringFrequency,
       receiptPath: clearReceipt ? null : (receiptPath ?? this.receiptPath),
       note: note ?? this.note,
+      editingId: clearEditing ? null : (editingId ?? this.editingId),
+      baselineRecurringRuleId: clearEditing
+          ? null
+          : (baselineRecurringRuleId ?? this.baselineRecurringRuleId),
     );
   }
 }
@@ -214,6 +231,24 @@ class AddTransactionWizardNotifier extends Notifier<AddTransactionSheetState> {
 
   void reset() =>
       state = AddTransactionSheetState(selectedDate: DateTime.now());
+
+  void loadForEdit(TransactionModel m) {
+    final raw = m.amount.abs().toString();
+    final amountString =
+        raw.endsWith('.0') ? raw.substring(0, raw.length - 2) : raw;
+    state = AddTransactionSheetState(
+      currentStep: 0,
+      amountString: amountString,
+      isExpense: m.amount < 0,
+      selectedCategoryId: m.categoryId,
+      selectedDate: m.date,
+      recurringFrequency: m.isRecurring ? 'monthly' : 'none',
+      receiptPath: m.receiptPath,
+      note: m.note ?? '',
+      editingId: m.id,
+      baselineRecurringRuleId: m.recurringRuleId,
+    );
+  }
 
   static int? _salaryCategoryId(List<CategoryModel>? categories) {
     if (categories == null) return null;

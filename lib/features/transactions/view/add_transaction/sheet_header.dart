@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
+import 'package:fintrack/core/constants/app_strings.dart';
+
+import '../../viewmodel/transaction_provider.dart';
 
 class AddTransactionSheetHandle extends StatelessWidget {
   const AddTransactionSheetHandle({super.key, required this.dark});
@@ -23,7 +27,7 @@ class AddTransactionSheetHandle extends StatelessWidget {
   }
 }
 
-class AddTransactionStepHeader extends StatelessWidget {
+class AddTransactionStepHeader extends ConsumerWidget {
   const AddTransactionStepHeader({
     super.key,
     required this.currentStep,
@@ -36,14 +40,18 @@ class AddTransactionStepHeader extends StatelessWidget {
   final bool dark;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final w = ref.watch(addTransactionWizardProvider);
+    final title = w.editingId != null
+        ? AppStrings.transactionsEditTitle
+        : AppStrings.transactionsNewTitle;
     final primary =
         dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final hint = dark ? AppColors.textHintDark : AppColors.textHintLight;
     return Row(
       children: [
         Text(
-          'New transaction',
+          title,
           style: TextStyle(
             color: primary,
             fontSize: 12,

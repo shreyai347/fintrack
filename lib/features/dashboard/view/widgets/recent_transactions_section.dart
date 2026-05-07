@@ -23,6 +23,8 @@ class RecentTransactionsSection extends ConsumerWidget {
     final dark = Theme.of(context).brightness == Brightness.dark;
     final title = dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final muted = dark ? AppColors.textMutedDark : AppColors.textMutedLight;
+    final border = dark ? AppColors.borderDark : AppColors.borderLight;
+    final cardBg = dark ? AppColors.cardDark : AppColors.cardLight;
 
     CategoryModel? cat(int id) {
       for (final c in categories) {
@@ -41,8 +43,21 @@ class RecentTransactionsSection extends ConsumerWidget {
               style: TextStyle(
                 color: title,
                 fontWeight: FontWeight.w600,
-                fontSize: 15,
+                fontSize: 17,
               ),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.info_outline,
+                size: 22,
+                color: dark ? AppColors.accentDark : AppColors.accentLight,
+              ),
+              tooltip: AppStrings.transactionsHelpTitle,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.transactionsHelp);
+              },
             ),
             const Spacer(),
             GestureDetector(
@@ -75,7 +90,22 @@ class RecentTransactionsSection extends ConsumerWidget {
           ...transactions.map((tx) {
             final c = cat(tx.categoryId);
             if (c == null) return const SizedBox.shrink();
-            return TransactionCard(transaction: tx, category: c);
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: Material(
+                color: Colors.transparent,
+                child: Card(
+                  elevation: 0,
+                  color: cardBg,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: border, width: 0.5),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: TransactionCard(transaction: tx, category: c),
+                ),
+              ),
+            );
           }),
       ],
     );
