@@ -19,7 +19,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -35,6 +35,10 @@ class AppDatabase extends _$AppDatabase {
           if (from < 4) {
             await (delete(categories)..where((c) => c.name.equals('Salary')))
                 .go();
+          }
+          if (from < 5) {
+            await _ensureSalaryCategory();
+            await _removeTravelCategory();
           }
         },
         beforeOpen: (details) async {
@@ -81,9 +85,9 @@ class AppDatabase extends _$AppDatabase {
         isDefault: const Value(true),
       ),
       CategoriesCompanion.insert(
-        name: 'Travel',
-        iconCodePoint: 0xe530,
-        colorHex: '#38BDF8',
+        name: 'Salary',
+        iconCodePoint: 0xe263,
+        colorHex: '#4ADE80',
         isDefault: const Value(true),
       ),
       CategoriesCompanion.insert(
@@ -100,7 +104,39 @@ class AppDatabase extends _$AppDatabase {
       }
     });
   }
+
+  Future<void> _ensureSalaryCategory() async {
+    final existing = await (select(categories)
+          ..where((c) => c.name.equals('Salary')))
+        .getSingleOrNull();
+    if (existing != null) return;
+    await into(categories).insert(
+      CategoriesCompanion.insert(
+        name: 'Salary',
+        iconCodePoint: 0xe263,
+        colorHex: '#4ADE80',
+        isDefault: const Value(true),
+      ),
+    );
+  }
+
+  Future<void> _removeTravelCategory() async {
+    final travel = await (select(categories)
+          ..where((c) => c.name.equals('Travel')))
+        .getSingleOrNull();
+    if (travel == null) return;
+    final other = await (select(categories)
+          ..where((c) => c.name.equals('Other')))
+        .getSingleOrNull();
+    if (other != null) {
+      await (update(transactions)
+            ..where((t) => t.categoryId.equals(travel.id)))
+          .write(TransactionsCompanion(categoryId: Value(other.id)));
+    }
+    await (delete(categories)..where((c) => c.id.equals(travel.id))).go();
+  }
 }
+
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   throw StateError('appDatabaseProvider must be overridden in main');

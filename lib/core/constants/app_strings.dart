@@ -5,6 +5,9 @@ abstract final class AppStrings {
 
   static const String navDashboard = 'Dashboard';
   static const String navTransactions = 'Transactions';
+  static const String navHome = 'Home';
+  static const String navTxns = 'Txns';
+  static const String navAdd = 'Add';
   static const String navAddTransaction = 'Add transaction';
   static const String navEditTransaction = 'Edit transaction';
   static const String navBudget = 'Budget';
@@ -48,7 +51,9 @@ abstract final class AppStrings {
   static const String transactionsDelete = 'Delete';
   static const String transactionsDeleteConfirmTitle = 'Delete transaction?';
   static const String transactionsDeleteConfirmBody =
-      'This cannot be undone.';
+      'This transaction will be removed from your list.';
+  static const String transactionsSalaryMissing =
+      'Salary category is not available. Try updating the app.';
   static const String transactionsCancel = 'Cancel';
   static const String transactionNotFound = 'Transaction not found';
 

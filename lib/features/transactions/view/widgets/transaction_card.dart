@@ -7,11 +7,11 @@ import 'package:fintrack/core/constants/app_colors.dart';
 import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
+import 'package:fintrack/core/widgets/fintrack_confirm_dialog.dart';
 import 'package:fintrack/generated/database/app_database.dart';
 
 import '../../model/category_model.dart';
 import '../../model/transaction_model.dart';
-import '../../repository/transaction_repository_impl.dart';
 import '../../viewmodel/transaction_provider.dart';
 
 String _transactionLineTitle(String? note) {
@@ -41,11 +41,19 @@ class TransactionCard extends ConsumerWidget {
     return Dismissible(
       key: ValueKey<int>(transaction.id),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (_) => showFintrackConfirmDialog(
+        context: context,
+        title: AppStrings.transactionsDeleteConfirmTitle,
+        message: AppStrings.transactionsDeleteConfirmBody,
+        cancelLabel: AppStrings.transactionsCancel,
+        confirmLabel: AppStrings.transactionsDelete,
+        destructiveConfirm: true,
+      ),
       background: Container(
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         color: AppColors.error,
-            child: const Icon(Icons.delete, color: AppColors.onVivid),
+        child: const Icon(Icons.delete, color: AppColors.onVivid),
       ),
       onDismissed: (_) async {
         final backup = transaction;
@@ -58,8 +66,8 @@ class TransactionCard extends ConsumerWidget {
             content: Text(AppStrings.transactionsDeleted),
             action: SnackBarAction(
               label: AppStrings.transactionsUndo,
-              onPressed: () {
-                ref.read(transactionRepositoryProvider).add(
+              onPressed: () async {
+                await ref.read(transactionNotifierProvider.notifier).addTransaction(
                       TransactionsCompanion.insert(
                         amount: backup.amount,
                         categoryId: backup.categoryId,
@@ -133,5 +141,4 @@ class TransactionCard extends ConsumerWidget {
       ),
     );
   }
-
 }

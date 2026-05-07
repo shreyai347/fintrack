@@ -181,6 +181,7 @@ class AddTransactionSheetState {
     String? amountString,
     bool? isExpense,
     int? selectedCategoryId,
+    bool clearSelectedCategory = false,
     DateTime? selectedDate,
     String? recurringFrequency,
     String? receiptPath,
@@ -191,7 +192,9 @@ class AddTransactionSheetState {
       currentStep: currentStep ?? this.currentStep,
       amountString: amountString ?? this.amountString,
       isExpense: isExpense ?? this.isExpense,
-      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
+      selectedCategoryId: clearSelectedCategory
+          ? null
+          : (selectedCategoryId ?? this.selectedCategoryId),
       selectedDate: selectedDate ?? this.selectedDate,
       recurringFrequency: recurringFrequency ?? this.recurringFrequency,
       receiptPath: clearReceipt ? null : (receiptPath ?? this.receiptPath),
@@ -201,6 +204,10 @@ class AddTransactionSheetState {
 }
 
 class AddTransactionWizardNotifier extends Notifier<AddTransactionSheetState> {
+  static int lastStepIndex(bool isExpense) => isExpense ? 4 : 3;
+
+  static int stepCount(bool isExpense) => isExpense ? 5 : 4;
+
   @override
   AddTransactionSheetState build() =>
       AddTransactionSheetState(selectedDate: DateTime.now());
@@ -208,10 +215,34 @@ class AddTransactionWizardNotifier extends Notifier<AddTransactionSheetState> {
   void reset() =>
       state = AddTransactionSheetState(selectedDate: DateTime.now());
 
-  void nextStep() {
-    if (state.currentStep < 4) {
-      state = state.copyWith(currentStep: state.currentStep + 1);
+  static int? _salaryCategoryId(List<CategoryModel>? categories) {
+    if (categories == null) return null;
+    for (final c in categories) {
+      if (c.name == 'Salary') return c.id;
     }
+    return null;
+  }
+
+  /// Advances from the amount step. Returns false if income flow cannot resolve
+  /// a Salary category.
+  bool advanceFromAmount({required List<CategoryModel>? categories}) {
+    final w = state;
+    if (w.parsedAmount <= 0) return false;
+    if (w.isExpense) {
+      state = w.copyWith(currentStep: 1);
+      return true;
+    }
+    final sid = _salaryCategoryId(categories);
+    if (sid == null) return false;
+    state = w.copyWith(selectedCategoryId: sid, currentStep: 1);
+    return true;
+  }
+
+  void advanceStep() {
+    final w = state;
+    final last = lastStepIndex(w.isExpense);
+    if (w.currentStep >= last) return;
+    state = w.copyWith(currentStep: w.currentStep + 1);
   }
 
   void prevStep() {
@@ -248,7 +279,14 @@ class AddTransactionWizardNotifier extends Notifier<AddTransactionSheetState> {
     state = state.copyWith(amountString: s.substring(0, s.length - 1));
   }
 
-  void setExpense(bool v) => state = state.copyWith(isExpense: v);
+  void setExpense(bool v) {
+    if (v == state.isExpense) return;
+    state = state.copyWith(
+      isExpense: v,
+      clearSelectedCategory: true,
+      currentStep: 0,
+    );
+  }
 
   void selectCategory(int id) =>
       state = state.copyWith(selectedCategoryId: id);

@@ -4,6 +4,7 @@ abstract final class CategoryIconAssets {
     'Transport': 'assets/car.png',
     'Shopping': 'assets/shopping.png',
     'Salary': 'assets/salary.png',
+    'Bills': 'assets/bill.png',
     'Health': 'assets/medicine.png',
     'Entertainment': 'assets/entarinement.png',
     'Other': 'assets/others.png',

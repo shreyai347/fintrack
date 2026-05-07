@@ -4,10 +4,10 @@ abstract final class BudgetSeed {
     'Food': 10000,
     'Transport': 5000,
     'Shopping': 10000,
+    'Salary': 5000,
     'Bills': 5000,
     'Health': 5000,
     'Entertainment': 5000,
-    'Travel': 5000,
     'Other': 5000,
   };
 

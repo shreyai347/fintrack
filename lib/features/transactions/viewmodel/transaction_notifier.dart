@@ -47,7 +47,9 @@ class TransactionNotifier extends Notifier<TransactionState> {
     try {
       final tx = await ref.read(transactionRepositoryProvider).getById(id);
       await ref.read(transactionRepositoryProvider).delete(id);
-      await ref.read(receiptRepositoryProvider).deleteReceipt(tx?.receiptPath);
+      try {
+        await ref.read(receiptRepositoryProvider).deleteReceipt(tx?.receiptPath);
+      } catch (_) {}
     } catch (e) {
       state = TransactionError(e.toString());
     }
