@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/widgets/shimmer_skeleton.dart';
 import 'package:fintrack/features/transactions/viewmodel/transaction_provider.dart';
 
@@ -22,11 +22,12 @@ class BudgetScreen extends ConsumerStatefulWidget {
 }
 
 class _BudgetScreenState extends ConsumerState<BudgetScreen> {
-  String _monthTitle(String monthYear) {
+  String _monthTitle(BuildContext context, String monthYear) {
     final p = monthYear.split('-');
     final y = int.parse(p[0]);
     final m = int.parse(p[1]);
-    return DateFormat.yMMMM('en').format(DateTime(y, m, 1));
+    return DateFormat.yMMMM(Localizations.localeOf(context).toString())
+        .format(DateTime(y, m, 1));
   }
 
   bool _isCurrentMonth(String my) {
@@ -44,6 +45,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(budgetNotifierProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -81,7 +83,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
                     FilledButton(
                       onPressed: () =>
                           ref.read(budgetNotifierProvider.notifier).refresh(),
-                      child: Text(AppStrings.dashboardRetry),
+                      child: Text(l10n.retry),
                     ),
                   ],
                 ),
@@ -93,7 +95,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
     } else if (state is BudgetLoaded) {
       final loaded = state;
       final my = loaded.monthYear;
-      final display = _monthTitle(my);
+      final display = _monthTitle(context, my);
       final canNext = !_isCurrentMonth(my);
       final prevMy = _shiftMonth(my, -1);
       final nextMy = _shiftMonth(my, 1);
@@ -138,7 +140,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
           OverallBudgetCard(loaded: loaded),
           const SizedBox(height: 20),
           Text(
-            AppStrings.byCategory,
+            l10n.byCategory,
             style: TextStyle(
               color:
                   dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
@@ -181,7 +183,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
-        title: Text(AppStrings.budgetScreen),
+        title: Text(l10n.budget),
       ),
       body: SafeArea(child: scrollable),
     );

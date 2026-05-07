@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:fintrack/l10n/app_localizations.dart';
+
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 
@@ -18,6 +21,7 @@ class AddTransactionStepReceipt extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final w = ref.watch(addTransactionWizardProvider);
     final notifier = ref.read(addTransactionWizardProvider.notifier);
     final primary =
@@ -27,7 +31,11 @@ class AddTransactionStepReceipt extends ConsumerWidget {
         dark ? AppColors.borderDark : AppColors.borderLight;
     final cats = ref.watch(categoriesProvider);
     final catName = cats.when(
-      data: (l) => categoryById(l, w.selectedCategoryId)?.name ?? '—',
+      data: (list) {
+        final raw = categoryById(list, w.selectedCategoryId)?.name;
+        if (raw == null) return '—';
+        return localizedCategoryName(l10n, raw);
+      },
       loading: () => '—',
       error: (_, _) => '—',
     );
@@ -55,7 +63,7 @@ class AddTransactionStepReceipt extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 14),
-          Text('Receipt photo', style: TextStyle(fontSize: 13, color: hint)),
+          Text(l10n.receiptPhotoTitle, style: TextStyle(fontSize: 13, color: hint)),
           const SizedBox(height: 10),
           if (w.receiptPath == null)
             ReceiptCapturePlaceholder(
@@ -79,7 +87,7 @@ class AddTransactionStepReceipt extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  'or skip this step',
+                  l10n.skipStep,
                   style: TextStyle(fontSize: 13, color: hint),
                 ),
               ),

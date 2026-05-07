@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 class ReceiptCapturePlaceholder extends StatelessWidget {
   const ReceiptCapturePlaceholder({
@@ -17,6 +17,7 @@ class ReceiptCapturePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final input = dark ? AppColors.inputDark : AppColors.inputLight;
     final border =
         dark ? AppColors.borderDark : AppColors.borderLight;
@@ -38,7 +39,7 @@ class ReceiptCapturePlaceholder extends StatelessWidget {
                 Icon(Icons.camera_alt_outlined, size: 40, color: accent),
                 const SizedBox(height: 12),
                 Text(
-                  'Tap to open camera',
+                  l10n.attachReceipt,
                   style: TextStyle(
                     fontSize: 16,
                     color: accent,
@@ -47,7 +48,7 @@ class ReceiptCapturePlaceholder extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Optional — scan your receipt',
+                  l10n.attachReceiptSub,
                   style: TextStyle(fontSize: 13, color: hint),
                 ),
               ],
@@ -106,6 +107,7 @@ class ReceiptAttachedPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return FutureBuilder<bool>(
       future: File(path).exists(),
       builder: (context, snap) {
@@ -116,7 +118,7 @@ class ReceiptAttachedPreview extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  AppStrings.receiptNotFound,
+                  l10n.receiptNotFound,
                   style: TextStyle(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? AppColors.textMutedDark

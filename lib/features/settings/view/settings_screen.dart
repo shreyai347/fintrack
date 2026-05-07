@@ -102,9 +102,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
-  String _languageSubtitle() {
+  String _languageSubtitle(AppLocalizations l10n) {
     final code = ref.watch(localeNotifierProvider)?.languageCode ?? 'en';
-    return code == 'hi' ? 'हिन्दी' : 'English';
+    return code == 'hi' ? l10n.languageHindi : l10n.languageEnglish;
   }
 
   Future<void> _pickTheme(BuildContext context, AppLocalizations l10n) async {
@@ -138,7 +138,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         );
   }
 
-  Future<void> _pickLanguage(BuildContext context) async {
+  Future<void> _pickLanguage(BuildContext context, AppLocalizations l10n) async {
     final choice = await showModalBottomSheet<String>(
       context: context,
       builder: (ctx) {
@@ -147,11 +147,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: const Text('English'),
+                title: Text(l10n.languageEnglish),
                 onTap: () => Navigator.pop(ctx, 'en'),
               ),
               ListTile(
-                title: const Text('हिन्दी'),
+                title: Text(l10n.languageHindi),
                 onTap: () => Navigator.pop(ctx, 'hi'),
               ),
             ],
@@ -174,7 +174,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         setState(() => _bioEnabled = true);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.authenticationFailed)),
+          SnackBar(content: Text(l10n.authFailed)),
         );
       }
     } else {
@@ -251,8 +251,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       title: Text(l10n.yourName),
                       content: TextField(
                         controller: controller,
-                        decoration: const InputDecoration(
-                          hintText: 'What should we call you?',
+                        decoration: InputDecoration(
+                          hintText: l10n.displayNameHint,
                         ),
                         autofocus: true,
                         textCapitalization: TextCapitalization.words,
@@ -315,8 +315,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                     subtitle: Text(
                       _bioAvailable == false
-                          ? l10n.biometricUnavailable
-                          : l10n.biometricLockSubtitle,
+                          ? l10n.biometricNotAvailable
+                          : l10n.biometricSub,
                       style: TextStyle(color: muted, fontSize: 12),
                     ),
                     value: _bioEnabled && (_bioAvailable == true),
@@ -363,15 +363,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 ),
                 subtitle: Text(
-                  _languageSubtitle(),
+                  _languageSubtitle(l10n),
                   style: TextStyle(color: muted, fontSize: 13),
                 ),
                 trailing: Icon(Icons.chevron_right, color: chevron),
-                onTap: () => _pickLanguage(context),
+                onTap: () => _pickLanguage(context, l10n),
               ),
             ],
           ),
-          _sectionHeader(l10n.dataSection, dark),
+          _sectionHeader(l10n.data, dark),
           _settingsCard(
             dark: dark,
             children: [
@@ -415,7 +415,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 trailing: Icon(Icons.chevron_right, color: chevron),
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.comingSoon)),
+                    SnackBar(content: Text(l10n.backupComingSoon)),
                   );
                 },
               ),
@@ -435,7 +435,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 ),
                 subtitle: Text(
-                  l10n.clearAllDataSubtitle,
+                  l10n.clearAllDataSub,
                   style: TextStyle(color: muted, fontSize: 13),
                 ),
                 trailing: Icon(Icons.chevron_right, color: chevron),
@@ -443,8 +443,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   final confirm = await showDialog<bool>(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: Text(l10n.clearDataConfirmTitle),
-                      content: Text(l10n.clearDataConfirmBody),
+                      title: Text(l10n.clearConfirmTitle),
+                      content: Text(l10n.clearConfirmSub),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(ctx, false),
@@ -463,7 +463,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   if (!context.mounted) return;
                   if (!ok) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.authenticationFailed)),
+                      SnackBar(content: Text(l10n.authFailed)),
                     );
                     return;
                   }
@@ -475,7 +475,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       .clearAllBudgetsAndReseedCurrentMonth();
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.dataCleared)),
+                    SnackBar(content: Text(l10n.clearSuccess)),
                   );
                 },
               ),

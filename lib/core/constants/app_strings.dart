@@ -16,8 +16,6 @@ abstract final class AppStrings {
   static const String navExport = 'Export';
 
   static const String placeholderSubtitle = 'Coming in a later phase.';
-  static const String today = 'Today';
-  static const String yesterday = 'Yesterday';
 
   static const String validationAmountRequired = 'Enter an amount';
   static const String validationAmountInvalid = 'Enter a valid number';

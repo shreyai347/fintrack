@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 
 import '../../model/dashboard_summary_model.dart';
@@ -14,6 +14,7 @@ class BudgetAlertBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!summary.isOverWarning) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final left = summary.budgetLimit - summary.totalSpent;
     final pct = (summary.budgetUsedPercent * 100).round();
@@ -22,8 +23,8 @@ class BudgetAlertBanner extends StatelessWidget {
     if (summary.isCritical) {
       final bg = AppColors.expense.withValues(alpha: dark ? 0.22 : 0.12);
       final body = left >= 0
-          ? '$pct% ${AppStrings.dashboardAlertUsed}. $leftStr ${AppStrings.dashboardAlertRemaining}. ${AppStrings.dashboardAlertCriticalBody}'
-          : '$pct% ${AppStrings.dashboardAlertUsed}. $leftStr ${AppStrings.dashboardAlertOver}. ${AppStrings.dashboardAlertCriticalBody}';
+          ? '$pct% ${l10n.dashboardAlertUsed}. $leftStr ${l10n.dashboardAlertRemaining}. ${l10n.dashboardAlertCriticalBody}'
+          : '$pct% ${l10n.dashboardAlertUsed}. $leftStr ${l10n.dashboardAlertOver}. ${l10n.dashboardAlertCriticalBody}';
       return Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(10),
@@ -65,8 +66,8 @@ class BudgetAlertBanner extends StatelessWidget {
     final amber = AppColors.warning;
     final bg = amber.withValues(alpha: dark ? 0.18 : 0.12);
     final body = left >= 0
-        ? '$pct% ${AppStrings.dashboardAlertUsed}. $leftStr ${AppStrings.dashboardAlertRemaining}. ${AppStrings.dashboardAlertWarningBody}'
-        : '$pct% ${AppStrings.dashboardAlertUsed}. $leftStr ${AppStrings.dashboardAlertOver}. ${AppStrings.dashboardAlertWarningBody}';
+        ? '$pct% ${l10n.dashboardAlertUsed}. $leftStr ${l10n.dashboardAlertRemaining}. ${l10n.dashboardAlertWarningBody}'
+        : '$pct% ${l10n.dashboardAlertUsed}. $leftStr ${l10n.dashboardAlertOver}. ${l10n.dashboardAlertWarningBody}';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(10),

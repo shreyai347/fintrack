@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
@@ -23,6 +24,7 @@ class AddTransactionStepReview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final w = ref.watch(addTransactionWizardProvider);
     final notifier = ref.read(addTransactionWizardProvider.notifier);
     final primary =
@@ -88,7 +90,7 @@ class AddTransactionStepReview extends ConsumerWidget {
                 textAlign: TextAlign.center,
               ),
               Text(
-                '${cat?.name ?? '—'} · ${DateFormatter.formatDisplay(w.selectedDate)}',
+                '${cat == null ? '—' : localizedCategoryName(l10n, cat.name)} · ${DateFormatter.formatDisplay(w.selectedDate)}',
                 style: TextStyle(fontSize: 13, color: hint),
                 textAlign: TextAlign.center,
               ),
@@ -105,7 +107,7 @@ class AddTransactionStepReview extends ConsumerWidget {
             child: Column(
               children: [
                 recapRow(
-                  AppStrings.transactionsStepAmount,
+                  l10n.transactionsStepAmount,
                   Text(
                     CurrencyFormatter.format(w.parsedAmount),
                     style: TextStyle(
@@ -116,11 +118,11 @@ class AddTransactionStepReview extends ConsumerWidget {
                   ),
                 ),
                 recapRow(
-                  AppStrings.fieldType,
+                  l10n.fieldType,
                   Text(
                     w.isExpense
-                        ? AppStrings.transactionsAmountExpense
-                        : AppStrings.transactionsAmountIncome,
+                        ? l10n.expense
+                        : l10n.income,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -131,7 +133,7 @@ class AddTransactionStepReview extends ConsumerWidget {
                   ),
                 ),
                 recapRow(
-                  AppStrings.transactionsStepCategory,
+                  l10n.transactionsStepCategory,
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -141,7 +143,7 @@ class AddTransactionStepReview extends ConsumerWidget {
                         const SizedBox(width: 6),
                       ],
                       Text(
-                        cat?.name ?? '—',
+                        cat == null ? '—' : localizedCategoryName(l10n, cat.name),
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
@@ -152,7 +154,7 @@ class AddTransactionStepReview extends ConsumerWidget {
                   ),
                 ),
                 recapRow(
-                  AppStrings.fieldDate,
+                  l10n.fieldDate,
                   Text(
                     DateFormatter.formatDisplay(w.selectedDate),
                     style: TextStyle(
@@ -167,7 +169,7 @@ class AddTransactionStepReview extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text('Note (optional)', style: TextStyle(fontSize: 14, color: hint)),
+          Text(l10n.noteOptional, style: TextStyle(fontSize: 14, color: hint)),
           const SizedBox(height: 8),
           TextField(
             controller: noteController,
@@ -179,7 +181,7 @@ class AddTransactionStepReview extends ConsumerWidget {
               filled: true,
               fillColor: input,
               counterText: '',
-              hintText: 'Add a note...',
+              hintText: l10n.notePlaceholder,
               hintStyle: TextStyle(color: hint, fontSize: 15),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 14),

@@ -1,17 +1,20 @@
 import 'package:intl/intl.dart';
 
-import '../constants/app_strings.dart';
-
 class DateFormatter {
   DateFormatter._();
 
   static String formatDisplay(DateTime dt) => DateFormat('dd MMM y').format(dt);
 
-  static String formatGroupHeader(DateTime dt, {DateTime? clock}) {
+  static String formatGroupHeader(
+    DateTime dt, {
+    DateTime? clock,
+    required String todayLabel,
+    required String yesterdayLabel,
+  }) {
     final n = clock ?? DateTime.now();
-    if (_sameDay(dt, n)) return AppStrings.today;
+    if (_sameDay(dt, n)) return todayLabel;
     if (_sameDay(dt, n.subtract(const Duration(days: 1)))) {
-      return AppStrings.yesterday;
+      return yesterdayLabel;
     }
     return formatDisplay(dt);
   }

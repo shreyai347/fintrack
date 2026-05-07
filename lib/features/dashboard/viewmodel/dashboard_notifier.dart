@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/config/theme_mode_notifier.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/core/config/locale_notifier.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 import '../../transactions/model/category_model.dart';
 import '../../transactions/model/transaction_model.dart';
@@ -30,6 +32,10 @@ class DashboardNotifier extends Notifier<DashboardState> {
 
   @override
   DashboardState build() {
+    ref.listen<Locale?>(localeNotifierProvider, (prev, next) {
+      if (prev == next) return;
+      scheduleMicrotask(() => _fetch(showLoading: false));
+    });
     final repo = ref.read(dashboardRepositoryProvider);
     ref.onDispose(() => _sub?.cancel());
     _sub?.cancel();
@@ -85,9 +91,12 @@ class DashboardNotifier extends Notifier<DashboardState> {
       }
     }
 
+    final loc = ref.read(localeNotifierProvider);
+    final l = lookupAppLocalizations(loc ?? const Locale('en'));
+
     String nameFor(int id) {
       for (final c in categories) {
-        if (c.id == id) return c.name;
+        if (c.id == id) return localizedCategoryName(l, c.name);
       }
       return '—';
     }
@@ -113,7 +122,7 @@ class DashboardNotifier extends Notifier<DashboardState> {
     if (others > 0) {
       rows.add((
         id: -1,
-        label: AppStrings.chartOthers,
+        label: l.chartOthers,
         amount: others,
         color: dark ? AppColors.textMutedDark : AppColors.textMutedLight,
       ));

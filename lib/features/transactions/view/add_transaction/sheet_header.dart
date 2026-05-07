@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 import '../../viewmodel/transaction_provider.dart';
 
@@ -43,10 +43,11 @@ class AddTransactionStepHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final w = ref.watch(addTransactionWizardProvider);
     final title = w.editingId != null
-        ? AppStrings.transactionsEditTitle
-        : AppStrings.transactionsNewTitle;
+        ? l10n.editTransaction
+        : l10n.addTransaction;
     final primary =
         dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final hint = dark ? AppColors.textHintDark : AppColors.textHintLight;

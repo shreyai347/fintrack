@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 import '../../../viewmodel/transaction_provider.dart';
 import '../add_transaction_utils.dart';
@@ -15,6 +15,7 @@ class AddTransactionStepAmount extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final w = ref.watch(addTransactionWizardProvider);
     final notifier = ref.read(addTransactionWizardProvider.notifier);
     final accent = dark ? AppColors.accentDark : AppColors.accentLight;
@@ -102,14 +103,14 @@ class AddTransactionStepAmount extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               typeChip(
-                label: AppStrings.transactionsAmountExpense,
+                label: l10n.expense,
                 selected: w.isExpense,
                 expense: true,
                 onTap: () => notifier.setExpense(true),
               ),
               const SizedBox(width: 14),
               typeChip(
-                label: AppStrings.transactionsAmountIncome,
+                label: l10n.income,
                 selected: !w.isExpense,
                 expense: false,
                 onTap: () => notifier.setExpense(false),
@@ -135,7 +136,7 @@ class AddTransactionStepAmount extends ConsumerWidget {
           const SizedBox(height: 4),
           Center(
             child: Text(
-              'tap to edit',
+              l10n.tapToEdit,
               style: TextStyle(fontSize: 13, color: accent),
             ),
           ),

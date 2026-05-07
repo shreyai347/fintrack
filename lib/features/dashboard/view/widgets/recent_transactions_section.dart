@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 import '../../../transactions/model/category_model.dart';
 import '../../../transactions/model/transaction_model.dart';
@@ -20,6 +20,7 @@ class RecentTransactionsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final title = dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final muted = dark ? AppColors.textMutedDark : AppColors.textMutedLight;
@@ -39,7 +40,7 @@ class RecentTransactionsSection extends ConsumerWidget {
         Row(
           children: [
             Text(
-              AppStrings.dashboardSectionRecent,
+              l10n.recentTransactions,
               style: TextStyle(
                 color: title,
                 fontWeight: FontWeight.w700,
@@ -52,7 +53,7 @@ class RecentTransactionsSection extends ConsumerWidget {
                 size: 22,
                 color: dark ? AppColors.accentDark : AppColors.accentLight,
               ),
-              tooltip: AppStrings.transactionsHelpTitle,
+              tooltip: l10n.transactionsHelpTitle,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
               onPressed: () {
@@ -65,7 +66,7 @@ class RecentTransactionsSection extends ConsumerWidget {
                 Navigator.of(context).pushNamed(AppRoutes.transactions);
               },
               child: Text(
-                AppStrings.dashboardSeeAll,
+                l10n.seeAll,
                 style: TextStyle(
                   color: dark ? AppColors.accentDark : AppColors.accentLight,
                   fontWeight: FontWeight.w700,
@@ -81,7 +82,7 @@ class RecentTransactionsSection extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Text(
-                AppStrings.transactionsEmptyTitle,
+                l10n.transactionsEmptyTitle,
                 style: TextStyle(color: muted),
               ),
             ),

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:fintrack/core/config/user_display_name_notifier.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/widgets/animated_card.dart';
 import 'package:fintrack/core/widgets/shimmer_skeleton.dart';
 
@@ -19,7 +19,9 @@ import 'widgets/stat_row_widget.dart';
 import 'widgets/weekly_bar_chart_card.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
-  const DashboardScreen({super.key});
+  const DashboardScreen({super.key, this.onProfileTap});
+
+  final VoidCallback? onProfileTap;
 
   @override
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
@@ -28,11 +30,14 @@ class DashboardScreen extends ConsumerStatefulWidget {
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(dashboardNotifierProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
     final dark = Theme.of(context).brightness == Brightness.dark;
     final bg = dark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
-    final monthLabel = DateFormat.yMMMM('en').format(DateTime.now());
+    final monthLabel =
+        DateFormat.yMMMM(Localizations.localeOf(context).toString())
+            .format(DateTime.now());
 
     final Widget scrollable;
     if (state is DashboardInitial || state is DashboardLoading) {
@@ -68,7 +73,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       onPressed: () => ref
                           .read(dashboardNotifierProvider.notifier)
                           .refresh(),
-                      child: Text(AppStrings.dashboardRetry),
+                      child: Text(l10n.retry),
                     ),
                   ],
                 ),
@@ -93,6 +98,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 children: [
                   _HeaderRow(
                     displayName: ref.watch(userDisplayNameNotifierProvider),
+                    l10n: l10n,
+                    onProfileTap: widget.onProfileTap,
                   ),
                   const SizedBox(height: 20),
                   AnimatedCard(
@@ -171,17 +178,53 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 }
 
 class _HeaderRow extends StatelessWidget {
-  const _HeaderRow({required this.displayName});
+  const _HeaderRow({
+    required this.displayName,
+    required this.l10n,
+    this.onProfileTap,
+  });
 
   final String displayName;
+  final AppLocalizations l10n;
+  final VoidCallback? onProfileTap;
 
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
     final title = dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
-    final greeting = displayName.isEmpty ? 'Hey buddy' : 'Hey, $displayName';
+    final greeting = displayName.isEmpty
+        ? l10n.dashboardHeyBuddy
+        : l10n.dashboardHeyName(displayName);
     final initial =
         displayName.isNotEmpty ? displayName[0].toUpperCase() : '';
+
+    Widget avatar = CircleAvatar(
+      radius: 22,
+      backgroundColor: dark ? AppColors.accentDark : AppColors.accentLight,
+      child: displayName.isEmpty
+          ? const Icon(
+              Icons.waving_hand_rounded,
+              color: AppColors.onVivid,
+              size: 24,
+            )
+          : Text(
+              initial,
+              style: const TextStyle(
+                color: AppColors.onVivid,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+    );
+    if (onProfileTap != null) {
+      avatar = Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onProfileTap,
+          customBorder: const CircleBorder(),
+          child: avatar,
+        ),
+      );
+    }
 
     return Row(
       children: [
@@ -195,23 +238,7 @@ class _HeaderRow extends StatelessWidget {
             ),
           ),
         ),
-        CircleAvatar(
-          radius: 22,
-          backgroundColor: dark ? AppColors.accentDark : AppColors.accentLight,
-          child: displayName.isEmpty
-              ? const Icon(
-                  Icons.waving_hand_rounded,
-                  color: AppColors.onVivid,
-                  size: 24,
-                )
-              : Text(
-                  initial,
-                  style: const TextStyle(
-                    color: AppColors.onVivid,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-        ),
+        avatar,
       ],
     );
   }

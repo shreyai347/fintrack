@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/features/receipt/viewmodel/camera_screen_notifier.dart';
 import 'package:fintrack/features/receipt/viewmodel/receipt_notifier.dart';
 
@@ -39,6 +39,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final bg = AppColors.scaffoldDark;
     final path = ref.watch(receiptNotifierProvider);
     final ui = ref.watch(cameraScreenNotifierProvider);
@@ -58,14 +59,14 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AppStrings.cameraPermissionRequired,
+                    l10n.cameraPermissionRequired,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: AppColors.textPrimaryDark),
                   ),
                   const SizedBox(height: 16),
                   FilledButton(
                     onPressed: openAppSettings,
-                    child: Text(AppStrings.openSettings),
+                    child: Text(l10n.openSettings),
                   ),
                 ],
               ),

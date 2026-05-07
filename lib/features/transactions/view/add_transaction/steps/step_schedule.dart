@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 
@@ -17,6 +18,7 @@ class AddTransactionStepSchedule extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final w = ref.watch(addTransactionWizardProvider);
     final notifier = ref.read(addTransactionWizardProvider.notifier);
     final primary =
@@ -33,7 +35,11 @@ class AddTransactionStepSchedule extends ConsumerWidget {
         : (dark ? AppColors.income : AppColors.incomeLight);
     final cats = ref.watch(categoriesProvider);
     final catName = cats.when(
-      data: (l) => categoryById(l, w.selectedCategoryId)?.name ?? '—',
+      data: (list) {
+        final raw = categoryById(list, w.selectedCategoryId)?.name;
+        if (raw == null) return '—';
+        return localizedCategoryName(l10n, raw);
+      },
       loading: () => '—',
       error: (_, _) => '—',
     );
@@ -86,14 +92,14 @@ class AddTransactionStepSchedule extends ConsumerWidget {
                 textAlign: TextAlign.center,
               ),
               Text(
-                '$catName · ${w.isExpense ? AppStrings.transactionsAmountExpense : AppStrings.transactionsAmountIncome}',
+                '$catName · ${w.isExpense ? l10n.expense : l10n.income}',
                 style: TextStyle(fontSize: 13, color: amtCol),
                 textAlign: TextAlign.center,
               ),
             ],
           ),
           const SizedBox(height: 16),
-          Text(AppStrings.fieldDate, style: TextStyle(fontSize: 13, color: hint)),
+          Text(l10n.fieldDate, style: TextStyle(fontSize: 13, color: hint)),
           const SizedBox(height: 8),
           Material(
             color: input,
@@ -149,18 +155,18 @@ class AddTransactionStepSchedule extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 14),
-          Text(AppStrings.fieldRecurring,
+          Text(l10n.fieldRecurring,
               style: TextStyle(fontSize: 13, color: hint)),
           const SizedBox(height: 10),
           Row(
             children: [
-              freqChip('none', AppStrings.transactionsRecurringNone),
+              freqChip('none', l10n.recurringNone),
               const SizedBox(width: 8),
-              freqChip('daily', AppStrings.transactionsRecurringDaily),
+              freqChip('daily', l10n.recurringDaily),
               const SizedBox(width: 8),
-              freqChip('weekly', AppStrings.transactionsRecurringWeekly),
+              freqChip('weekly', l10n.recurringWeekly),
               const SizedBox(width: 8),
-              freqChip('monthly', AppStrings.transactionsRecurringMonthly),
+              freqChip('monthly', l10n.recurringMonthly),
             ],
           ),
           const SizedBox(height: 14),
@@ -175,12 +181,12 @@ class AddTransactionStepSchedule extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Recurring info',
+                  l10n.recurringInfoTitle,
                   style: TextStyle(fontSize: 13, color: hint),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Set to repeat this transaction automatically at the selected frequency.',
+                  l10n.recurringInfo,
                   style: TextStyle(fontSize: 13, height: 1.35, color: muted),
                 ),
               ],

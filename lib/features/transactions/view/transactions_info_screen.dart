@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 class TransactionsInfoScreen extends StatelessWidget {
   const TransactionsInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final bg = dark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
     final cardBg = dark ? AppColors.cardDark : AppColors.cardLight;
@@ -55,24 +56,24 @@ class TransactionsInfoScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
-        title: Text(AppStrings.transactionsHelpTitle),
+        title: Text(l10n.transactionsHelpTitle),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
         children: [
           section(
-            AppStrings.transactionsHelpSpendingTitle,
-            AppStrings.transactionsHelpSpendingBody,
+            l10n.transactionsHelpSpendingTitle,
+            l10n.transactionsHelpSpendingBody,
           ),
           const SizedBox(height: 12),
           section(
-            AppStrings.transactionsHelpIncomeTitle,
-            AppStrings.transactionsHelpIncomeBody,
+            l10n.transactionsHelpIncomeTitle,
+            l10n.transactionsHelpIncomeBody,
           ),
           const SizedBox(height: 12),
           section(
-            AppStrings.transactionsHelpRecurringTitle,
-            AppStrings.transactionsHelpRecurringBody,
+            l10n.transactionsHelpRecurringTitle,
+            l10n.transactionsHelpRecurringBody,
           ),
         ],
       ),

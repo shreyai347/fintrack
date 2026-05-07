@@ -4,8 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/widgets/fintrack_confirm_dialog.dart';
 import 'package:fintrack/generated/database/app_database.dart';
@@ -14,9 +15,10 @@ import '../../model/category_model.dart';
 import '../../model/transaction_model.dart';
 import '../../viewmodel/transaction_provider.dart';
 
-String _transactionLineTitle(String? note) {
+String _transactionLineTitle(BuildContext context, String? note) {
+  final l10n = AppLocalizations.of(context)!;
   if (note == null || note.trim().isEmpty) {
-    return AppStrings.transactionsListFallbackTitle;
+    return l10n.transactionsListFallbackTitle;
   }
   return note.trim();
 }
@@ -33,6 +35,7 @@ class TransactionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final green = dark ? AppColors.income : AppColors.incomeLight;
     final red = dark ? AppColors.expense : AppColors.expenseLight;
@@ -43,10 +46,10 @@ class TransactionCard extends ConsumerWidget {
       direction: DismissDirection.endToStart,
       confirmDismiss: (_) => showFintrackConfirmDialog(
         context: context,
-        title: AppStrings.transactionsDeleteConfirmTitle,
-        message: AppStrings.transactionsDeleteConfirmBody,
-        cancelLabel: AppStrings.transactionsCancel,
-        confirmLabel: AppStrings.transactionsDelete,
+        title: l10n.deleteConfirm,
+        message: l10n.deleteConfirmSub,
+        cancelLabel: l10n.cancel,
+        confirmLabel: l10n.delete,
         destructiveConfirm: true,
       ),
       background: Container(
@@ -63,9 +66,9 @@ class TransactionCard extends ConsumerWidget {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppStrings.transactionsDeleted),
+            content: Text(l10n.transactionDeleted),
             action: SnackBarAction(
-              label: AppStrings.transactionsUndo,
+              label: l10n.undoDelete,
               onPressed: () async {
                 await ref.read(transactionNotifierProvider.notifier).addTransaction(
                       TransactionsCompanion.insert(
@@ -111,7 +114,7 @@ class TransactionCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _transactionLineTitle(transaction.note),
+                        _transactionLineTitle(context, transaction.note),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                               color: dark
@@ -121,7 +124,7 @@ class TransactionCard extends ConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        category.name,
+                        localizedCategoryName(l10n, category.name),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontSize: 15,
                               color: dark

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 import '../model/transaction_model.dart';
 import '../viewmodel/transaction_provider.dart';
@@ -28,6 +28,7 @@ class _EditTransactionScreenState extends ConsumerState<EditTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final listState = ref.watch(transactionNotifierProvider);
     final m = ref.watch(transactionByIdProvider(widget.transactionId));
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -39,7 +40,7 @@ class _EditTransactionScreenState extends ConsumerState<EditTransactionScreen> {
     } else if (listState is TransactionError) {
       body = Center(child: Text(listState.message));
     } else if (m == null) {
-      body = Center(child: Text(AppStrings.transactionNotFound));
+      body = Center(child: Text(l10n.transactionNotFound));
     } else {
       body = SafeArea(
         child: _EditTransactionWizardLoader(
@@ -52,7 +53,7 @@ class _EditTransactionScreenState extends ConsumerState<EditTransactionScreen> {
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
-        title: Text(AppStrings.transactionsEditTitle),
+        title: Text(l10n.editTransaction),
       ),
       body: body,
     );

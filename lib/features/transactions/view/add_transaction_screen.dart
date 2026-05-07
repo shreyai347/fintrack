@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/features/transactions/view/add_transaction/bottom_actions.dart';
 import 'package:fintrack/features/transactions/view/add_transaction/persist_new_transaction.dart';
 import 'package:fintrack/features/transactions/view/add_transaction/sheet_header.dart';
@@ -41,9 +41,10 @@ class AddTransactionScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final title = ref.watch(addTransactionWizardProvider).editingId != null
-        ? AppStrings.transactionsEditTitle
-        : AppStrings.transactionsNewTitle;
+        ? l10n.editTransaction
+        : l10n.addTransaction;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(

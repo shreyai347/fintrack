@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 
 import '../model/transaction_model.dart';
@@ -21,6 +21,7 @@ class TransactionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(transactionNotifierProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -54,7 +55,7 @@ class TransactionScreen extends ConsumerWidget {
                               .read(transactionNotifierProvider.notifier)
                               .retry();
                         },
-                        child: Text(AppStrings.transactionsRetry),
+                        child: Text(l10n.transactionsRetry),
                       ),
                     ],
                   ),
@@ -91,7 +92,11 @@ class TransactionScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 12, bottom: 8),
                         child: Text(
-                          DateFormatter.formatGroupHeader(day),
+                          DateFormatter.formatGroupHeader(
+                            day,
+                            todayLabel: l10n.today,
+                            yesterdayLabel: l10n.yesterday,
+                          ),
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
@@ -148,11 +153,11 @@ class TransactionScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
-        title: Text(AppStrings.navTransactions),
+        title: Text(l10n.transactions),
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
-            tooltip: AppStrings.transactionsHelpTitle,
+            tooltip: l10n.transactionsHelpTitle,
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.transactionsHelp);
             },

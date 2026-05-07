@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/utils/validators.dart';
 import 'package:fintrack/features/transactions/model/category_model.dart';
@@ -104,6 +105,7 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
   }
 
   Future<void> _submit(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     if (!widget.canEdit) return;
     final raw = _controller.text.trim();
     final err = Validators.validateAmount(raw);
@@ -116,13 +118,13 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
     final parsed = double.tryParse(normalized);
     if (parsed == null || parsed <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(AppStrings.validationAmountInvalid)),
+        SnackBar(content: Text(l10n.validationAmountInvalid)),
       );
       return;
     }
     if (parsed <= widget.budget.spentAmount) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(AppStrings.limitBelowSpent)),
+        SnackBar(content: Text(l10n.limitBelowSpent)),
       );
       return;
     }
@@ -131,7 +133,7 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
       if (!context.mounted) return;
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(AppStrings.budgetUpdated)),
+        SnackBar(content: Text(l10n.budgetUpdated)),
       );
     } catch (e) {
       if (!context.mounted) return;
@@ -141,6 +143,7 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final title = dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final muted = dark ? AppColors.textMutedDark : AppColors.textMutedLight;
@@ -150,7 +153,7 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            AppStrings.budgetViewOnlyPast,
+            l10n.budgetViewOnlyPast,
             style: TextStyle(color: muted),
           ),
         ),
@@ -165,7 +168,7 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              AppStrings.editBudget,
+              l10n.editBudget,
               style: TextStyle(
                 color: title,
                 fontWeight: FontWeight.w700,
@@ -186,7 +189,7 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    widget.category.name,
+                    localizedCategoryName(l10n, widget.category.name),
                     style: TextStyle(
                       color: title,
                       fontWeight: FontWeight.w600,
@@ -198,7 +201,7 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
             ),
             const SizedBox(height: 12),
             Text(
-              '${AppStrings.currentLimit}: ${CurrencyFormatter.format(widget.budget.limitAmount)}',
+              '${l10n.currentLimit}: ${CurrencyFormatter.format(widget.budget.limitAmount)}',
               style: TextStyle(color: muted, fontSize: 13),
             ),
             const SizedBox(height: 16),
@@ -209,14 +212,14 @@ class _EditBudgetBodyState extends State<_EditBudgetBody> {
                 FilteringTextInputFormatter.allow(RegExp(r'[\d.,]')),
               ],
               decoration: InputDecoration(
-                labelText: AppStrings.newLimit,
+                labelText: l10n.newLimit,
                 border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
             FilledButton(
               onPressed: () => _submit(context),
-              child: Text(AppStrings.saveBudget),
+              child: Text(l10n.saveBudget),
             ),
           ],
         ),

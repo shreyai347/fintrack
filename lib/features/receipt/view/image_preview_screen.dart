@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/features/receipt/repository/receipt_repository_impl.dart';
 import 'package:fintrack/features/receipt/viewmodel/receipt_notifier.dart';
 
@@ -37,17 +37,21 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
     final ok =
         await ref.read(receiptRepositoryProvider).receiptExists(widget.imagePath);
     if (!mounted) return;
-    if (!ok) setState(() => _error = AppStrings.receiptNotFound);
+    if (!ok) {
+      final loc = AppLocalizations.of(context)!;
+      setState(() => _error = loc.receiptNotFound);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.readOnly) {
       final theme = Theme.of(context);
+      final l10n = AppLocalizations.of(context)!;
       return Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          title: Text(AppStrings.transactionDetailViewReceipt),
+          title: Text(l10n.transactionDetailViewReceipt),
         ),
         body: _error != null
             ? Center(
@@ -74,6 +78,8 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
               ),
       );
     }
+
+    final l10n = AppLocalizations.of(context)!;
 
     final bg = AppColors.scaffoldDark;
 
@@ -128,7 +134,7 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
                             .clearReceipt();
                         if (context.mounted) Navigator.of(context).pop();
                       },
-                      child: Text(AppStrings.retake),
+                      child: Text(l10n.retake),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -142,7 +148,7 @@ class _ImagePreviewScreenState extends ConsumerState<ImagePreviewScreen> {
                           : () {
                               Navigator.of(context).pop(widget.imagePath);
                             },
-                      child: Text(AppStrings.usePhoto),
+                      child: Text(l10n.usePhoto),
                     ),
                   ),
                 ],

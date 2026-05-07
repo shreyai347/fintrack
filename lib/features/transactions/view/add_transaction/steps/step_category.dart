@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
 
@@ -17,6 +18,7 @@ class AddTransactionStepCategory extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final w = ref.watch(addTransactionWizardProvider);
     final notifier = ref.read(addTransactionWizardProvider.notifier);
     final primary =
@@ -49,15 +51,15 @@ class AddTransactionStepCategory extends ConsumerWidget {
               ),
               Text(
                 w.isExpense
-                    ? AppStrings.transactionsAmountExpense
-                    : AppStrings.transactionsAmountIncome,
+                    ? l10n.expense
+                    : l10n.income,
                 style: TextStyle(fontSize: 13, color: amtCol),
                 textAlign: TextAlign.center,
               ),
             ],
           ),
           const SizedBox(height: 16),
-          Text('Category', style: TextStyle(fontSize: 13, color: hint)),
+          Text(l10n.category, style: TextStyle(fontSize: 13, color: hint)),
           const SizedBox(height: 12),
           cats.when(
             data: (list) => Wrap(
@@ -92,7 +94,7 @@ class AddTransactionStepCategory extends ConsumerWidget {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            c.name,
+                            localizedCategoryName(l10n, c.name),
                             style: TextStyle(
                               color: sel ? accent : muted,
                               fontSize: 15,

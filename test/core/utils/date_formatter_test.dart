@@ -1,4 +1,3 @@
-import 'package:fintrack/core/constants/app_strings.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,20 +14,26 @@ void main() {
       DateFormatter.formatGroupHeader(
         DateTime(2026, 5, 7),
         clock: clock,
+        todayLabel: 'Today',
+        yesterdayLabel: 'Yesterday',
       ),
-      AppStrings.today,
+      'Today',
     );
     expect(
       DateFormatter.formatGroupHeader(
         DateTime(2026, 5, 6),
         clock: clock,
+        todayLabel: 'Today',
+        yesterdayLabel: 'Yesterday',
       ),
-      AppStrings.yesterday,
+      'Yesterday',
     );
     expect(
       DateFormatter.formatGroupHeader(
         DateTime(2026, 1, 1),
         clock: clock,
+        todayLabel: 'Today',
+        yesterdayLabel: 'Yesterday',
       ),
       '01 Jan 2026',
     );

@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/generated/database/app_database.dart';
 
 import 'package:fintrack/features/transactions/model/recurring_transaction_model.dart';
@@ -14,11 +14,12 @@ Future<void> persistNewTransaction(
   WidgetRef ref,
   TextEditingController noteController,
 ) async {
+  final l10n = AppLocalizations.of(context)!;
   final w = ref.read(addTransactionWizardProvider);
   final double parsed = w.parsedAmount;
   if (parsed <= 0 || w.selectedCategoryId == null) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppStrings.validationAmountRequired)),
+      SnackBar(content: Text(l10n.validationAmountRequired)),
     );
     return;
   }
@@ -79,7 +80,7 @@ Future<void> persistNewTransaction(
     }
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppStrings.transactionsSaved)),
+      SnackBar(content: Text(l10n.transactionsSaved)),
     );
     ref.read(addTransactionWizardProvider.notifier).reset();
     ref.read(addTransactionOverlayVisibleProvider.notifier).hide();

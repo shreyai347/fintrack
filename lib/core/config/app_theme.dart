@@ -22,6 +22,20 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: AppColors.scaffoldLight,
       cardColor: AppColors.cardLight,
       dividerColor: AppColors.dividerLight,
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.scaffoldLight,
+        foregroundColor: AppColors.textPrimaryLight,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textPrimaryLight,
+        ),
+        iconTheme: const IconThemeData(color: AppColors.textPrimaryLight),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.inputLight,
@@ -82,6 +96,20 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: AppColors.scaffoldDark,
       cardColor: AppColors.cardDark,
       dividerColor: AppColors.dividerDark,
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.scaffoldDark,
+        foregroundColor: AppColors.textPrimaryDark,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textPrimaryDark,
+        ),
+        iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.inputDark,

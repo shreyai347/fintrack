@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 class EmptyTransactionWidget extends StatelessWidget {
   const EmptyTransactionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final muted =
         dark ? AppColors.textMutedDark : AppColors.textMutedLight;
@@ -25,7 +26,7 @@ class EmptyTransactionWidget extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            AppStrings.transactionsEmptyTitle,
+            l10n.transactionsEmptyTitle,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
@@ -33,7 +34,7 @@ class EmptyTransactionWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            AppStrings.transactionsEmptySubtitle,
+            l10n.transactionsEmptySubtitle,
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium

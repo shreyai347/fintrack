@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 import '../../model/chart_data_model.dart';
 import '../painter/weekly_bar_painter.dart';
@@ -12,6 +12,7 @@ class WeeklyBarChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final border = dark ? AppColors.borderDark : AppColors.borderLight;
     final card = dark ? AppColors.cardDark : AppColors.cardLight;
@@ -28,7 +29,7 @@ class WeeklyBarChartCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.dashboardWeeklySpending,
+            l10n.weeklySpending,
             style: TextStyle(
               color: title,
               fontWeight: FontWeight.w700,

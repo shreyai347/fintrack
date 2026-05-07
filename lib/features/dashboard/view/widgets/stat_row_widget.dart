@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 
 class StatRowWidget extends StatelessWidget {
@@ -15,6 +15,7 @@ class StatRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final card = dark ? AppColors.cardDark : AppColors.cardLight;
     final border = dark ? AppColors.borderDark : AppColors.borderLight;
@@ -51,9 +52,9 @@ class StatRowWidget extends StatelessWidget {
 
     return Row(
       children: [
-        cell(AppStrings.dashboardStatDailyAvg, CurrencyFormatter.format(dailyAvg)),
+        cell(l10n.dailyAvg, CurrencyFormatter.format(dailyAvg)),
         const SizedBox(width: 12),
-        cell(AppStrings.dashboardStatTransactions, '$txCount'),
+        cell(l10n.transactionCount, '$txCount'),
       ],
     );
   }

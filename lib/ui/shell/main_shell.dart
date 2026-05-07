@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/config/app_routes.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/features/budget/view/budget_screen.dart';
 import 'package:fintrack/features/budget/viewmodel/budget_provider.dart';
 import 'package:fintrack/features/dashboard/view/dashboard_screen.dart';
@@ -30,11 +30,12 @@ class _MainShellState extends ConsumerState<MainShell> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final appBarTitles = [
-      AppStrings.navHome,
-      AppStrings.navTransactions,
-      AppStrings.navBudget,
-      AppStrings.navMore,
+      l10n.navHome,
+      l10n.transactions,
+      l10n.navBudget,
+      l10n.navMore,
     ];
     final overlayOpen = ref.watch(addTransactionOverlayVisibleProvider);
 
@@ -48,7 +49,7 @@ class _MainShellState extends ConsumerState<MainShell> {
                   ? [
                       IconButton(
                         icon: const Icon(Icons.info_outline),
-                        tooltip: AppStrings.transactionsHelpTitle,
+                        tooltip: l10n.transactionsHelpTitle,
                         onPressed: () {
                           Navigator.of(context)
                               .pushNamed(AppRoutes.transactionsHelp);
@@ -62,11 +63,13 @@ class _MainShellState extends ConsumerState<MainShell> {
         children: [
           IndexedStack(
             index: _tab,
-            children: const [
-              DashboardScreen(),
-              TransactionScreen(embedded: true),
-              BudgetScreen(embedded: true),
-              SettingsScreen(),
+            children: [
+              DashboardScreen(
+                onProfileTap: () => setState(() => _tab = 3),
+              ),
+              const TransactionScreen(embedded: true),
+              const BudgetScreen(embedded: true),
+              const SettingsScreen(),
             ],
           ),
           if (overlayOpen)
@@ -137,23 +140,23 @@ class _MainShellState extends ConsumerState<MainShell> {
             children: [
               _navItem(
                 icon: Icons.home_rounded,
-                label: AppStrings.navHome,
+                label: l10n.navHome,
                 index: 0,
               ),
               _navItem(
                 icon: Icons.receipt_long_rounded,
-                label: AppStrings.navTxns,
+                label: l10n.navTxns,
                 index: 1,
               ),
               const SizedBox(width: 40),
               _navItem(
                 icon: Icons.pie_chart_rounded,
-                label: AppStrings.navBudget,
+                label: l10n.navBudget,
                 index: 2,
               ),
               _navItem(
                 icon: Icons.more_horiz_rounded,
-                label: AppStrings.navMore,
+                label: l10n.navMore,
                 index: 3,
               ),
             ],

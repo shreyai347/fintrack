@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/features/dashboard/view/widgets/budget_progress_bar.dart';
 
@@ -13,6 +13,7 @@ class OverallBudgetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final card = dark ? AppColors.cardDark : AppColors.cardLight;
     final border = dark ? AppColors.borderDark : AppColors.borderLight;
@@ -31,7 +32,7 @@ class OverallBudgetCard extends StatelessWidget {
       badgeColor = dark ? AppColors.expense : AppColors.expenseLight;
     }
     final pctLabel =
-        '${(loaded.overallPercent * 100).clamp(0, 999).round()}% ${AppStrings.used}';
+        '${(loaded.overallPercent * 100).clamp(0, 999).round()}% ${l10n.used}';
 
     final borderSide = loaded.isCritical
         ? Border.all(
@@ -55,7 +56,7 @@ class OverallBudgetCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  AppStrings.overallSpent,
+                  l10n.overallSpent,
                   style: TextStyle(color: muted, fontSize: 13),
                 ),
               ),

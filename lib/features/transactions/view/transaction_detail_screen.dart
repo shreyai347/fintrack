@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
@@ -20,6 +21,7 @@ class TransactionDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final listState = ref.watch(transactionNotifierProvider);
     final tx = ref.watch(transactionByIdProvider(transactionId));
     final catsAsync = ref.watch(categoriesProvider);
@@ -39,7 +41,7 @@ class TransactionDetailScreen extends ConsumerWidget {
     } else if (listState is TransactionError) {
       body = Center(child: Text(listState.message));
     } else if (tx == null) {
-      body = Center(child: Text(AppStrings.transactionNotFound));
+      body = Center(child: Text(l10n.transactionNotFound));
     } else {
       body = catsAsync.when(
         data: (cats) {
@@ -51,15 +53,13 @@ class TransactionDetailScreen extends ConsumerWidget {
             }
           }
           if (cat == null) {
-            return Center(child: Text(AppStrings.transactionNotFound));
+            return Center(child: Text(l10n.transactionNotFound));
           }
           final isExpense = tx.amount < 0;
           final amtColor = isExpense ? red : green;
-          final typeLabel = isExpense
-              ? AppStrings.transactionsAmountExpense
-              : AppStrings.transactionsAmountIncome;
+          final typeLabel = isExpense ? l10n.expense : l10n.income;
           final lineTitle = (tx.note == null || tx.note!.trim().isEmpty)
-              ? AppStrings.transactionsListFallbackTitle
+              ? l10n.transactionsListFallbackTitle
               : tx.note!.trim();
 
           Widget row(String label, Widget value) {
@@ -110,7 +110,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 18),
                       row(
-                        AppStrings.transactionDetailType,
+                        l10n.transactionDetailType,
                         Text(
                           typeLabel,
                           style: TextStyle(
@@ -121,7 +121,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                         ),
                       ),
                       row(
-                        AppStrings.transactionDetailAmount,
+                        l10n.transactionDetailAmount,
                         Text(
                           CurrencyFormatter.format(tx.amount),
                           style: TextStyle(
@@ -132,7 +132,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                         ),
                       ),
                       row(
-                        AppStrings.transactionDetailCategory,
+                        l10n.transactionDetailCategory,
                         Row(
                           children: [
                             CircleAvatar(
@@ -146,7 +146,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              cat.name,
+                              localizedCategoryName(l10n, cat.name),
                               style: TextStyle(
                                 color: titleCol,
                                 fontSize: 16,
@@ -157,7 +157,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                         ),
                       ),
                       row(
-                        AppStrings.transactionDetailDate,
+                        l10n.transactionDetailDate,
                         Text(
                           DateFormatter.formatDisplay(tx.date),
                           style: TextStyle(
@@ -167,11 +167,11 @@ class TransactionDetailScreen extends ConsumerWidget {
                         ),
                       ),
                       row(
-                        AppStrings.transactionDetailRecurring,
+                        l10n.transactionDetailRecurring,
                         Text(
                           tx.isRecurring
-                              ? AppStrings.transactionDetailYes
-                              : AppStrings.transactionDetailNo,
+                              ? l10n.transactionDetailYes
+                              : l10n.transactionDetailNo,
                           style: TextStyle(
                             color: titleCol,
                             fontSize: 16,
@@ -180,7 +180,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                       ),
                       if (tx.note != null && tx.note!.trim().isNotEmpty)
                         row(
-                          AppStrings.transactionDetailNote,
+                          l10n.transactionDetailNote,
                           Text(
                             tx.note!.trim(),
                             style: TextStyle(
@@ -193,12 +193,12 @@ class TransactionDetailScreen extends ConsumerWidget {
                       if (tx.receiptPath != null &&
                           tx.receiptPath!.trim().isNotEmpty)
                         row(
-                          AppStrings.transactionsAttachReceipt,
+                          l10n.transactionDetailViewReceipt,
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                AppStrings.transactionDetailReceiptAttached,
+                                l10n.transactionDetailReceiptAttached,
                                 style: TextStyle(
                                   color: titleCol,
                                   fontSize: 15,
@@ -219,7 +219,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                                     );
                                   },
                                   icon: const Icon(Icons.photo_outlined),
-                                  label: Text(AppStrings.viewReceipt),
+                                  label: Text(l10n.viewReceipt),
                                 ),
                               ),
                             ],
@@ -240,11 +240,11 @@ class TransactionDetailScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
-        title: Text(AppStrings.transactionDetailTitle),
+        title: Text(l10n.transactionDetailTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_outlined),
-            tooltip: AppStrings.transactionsEditTitle,
+            tooltip: l10n.editTransaction,
             onPressed: () async {
               await Navigator.of(context).pushNamed(
                 AppRoutes.editTransaction,

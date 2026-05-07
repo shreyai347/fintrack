@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 
 import '../../model/dashboard_summary_model.dart';
@@ -74,6 +74,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
   }
 
   Widget _front(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final card = dark ? AppColors.cardDark : AppColors.cardLight;
     final border = dark ? AppColors.borderDark : AppColors.borderLight;
@@ -103,7 +104,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
                 Padding(
                   padding: const EdgeInsets.only(right: 120),
                   child: Text(
-                    '${AppStrings.dashboardTotalSpentPrefix} — ${widget.monthLabel}',
+                    '${l10n.totalSpent} — ${widget.monthLabel}',
                     style: TextStyle(color: muted, fontSize: 13),
                   ),
                 ),
@@ -123,14 +124,14 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
                     style: TextStyle(color: muted, fontSize: 13),
                     children: [
                       TextSpan(
-                          text: '${AppStrings.dashboardBudgetLabel} $budget · '),
+                          text: '${l10n.budgetLabel} $budget · '),
                       TextSpan(
                         text: CurrencyFormatter.format(left),
                         style: TextStyle(
                             color: leftColor, fontWeight: FontWeight.w600),
                       ),
                       TextSpan(
-                        text: ' ${AppStrings.dashboardBudgetLeftSuffix}',
+                        text: ' ${l10n.budgetLeft}',
                         style: TextStyle(
                             color: leftColor, fontWeight: FontWeight.w600),
                       ),
@@ -146,7 +147,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
             top: 10,
             right: 10,
             child: Tooltip(
-              message: AppStrings.dashboardAddBudget,
+              message: l10n.addBudget,
               child: Material(
                 color: Colors.transparent,
                 elevation: 0,
@@ -207,7 +208,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                AppStrings.dashboardAddBudget,
+                                l10n.addBudget,
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
@@ -218,7 +219,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
                                 ),
                               ),
                               Text(
-                                AppStrings.dashboardAddBudgetHint,
+                                l10n.addBudgetHint,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500,
@@ -241,6 +242,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
   }
 
   Widget _back(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final card = dark ? AppColors.cardDark : AppColors.cardLight;
     final border = dark ? AppColors.borderDark : AppColors.borderLight;
@@ -274,7 +276,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppStrings.dashboardFlipCompare,
+              l10n.monthlyComparison,
               style: TextStyle(color: muted, fontSize: 13),
             ),
             const SizedBox(height: 14),
@@ -285,7 +287,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppStrings.dashboardFlipThisMonth,
+                        l10n.flipThisMonth,
                         style: TextStyle(color: muted, fontSize: 12),
                       ),
                       const SizedBox(height: 4),
@@ -305,7 +307,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppStrings.dashboardFlipLastMonth,
+                        l10n.flipLastMonth,
                         style: TextStyle(color: muted, fontSize: 12),
                       ),
                       const SizedBox(height: 4),
@@ -330,7 +332,7 @@ class _BalanceFlipCardState extends State<BalanceFlipCard>
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                '$arrow $pct% ${AppStrings.dashboardFlipVsLastMonth}',
+                '$arrow $pct% ${l10n.flipVsLastMonth}',
                 style: TextStyle(
                   color: badgeColor,
                   fontWeight: FontWeight.w700,

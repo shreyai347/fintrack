@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
 
 import '../../../transactions/model/category_model.dart';
@@ -19,6 +20,7 @@ class SpendingBreakdownCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final border = dark ? AppColors.borderDark : AppColors.borderLight;
     final card = dark ? AppColors.cardDark : AppColors.cardLight;
@@ -47,7 +49,7 @@ class SpendingBreakdownCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.dashboardByCategory,
+            l10n.byCategory,
             style: TextStyle(
               color: titleC,
               fontWeight: FontWeight.w700,
@@ -95,7 +97,9 @@ class SpendingBreakdownCard extends StatelessWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          c?.name ?? '—',
+                          c == null
+                              ? '—'
+                              : localizedCategoryName(l10n, c.name),
                           style: TextStyle(
                             color: titleC,
                             fontSize: 16,
@@ -119,7 +123,7 @@ class SpendingBreakdownCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
-                        AppStrings.almostFull,
+                        l10n.almostFull,
                         style: TextStyle(
                           color:
                               dark ? AppColors.expense : AppColors.expenseLight,

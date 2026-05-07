@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 class CropOverlay extends StatelessWidget {
   const CropOverlay({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return IgnorePointer(
       child: CustomPaint(
         painter: _CropFramePainter(),
@@ -16,7 +17,7 @@ class CropOverlay extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 120),
               child: Text(
-                AppStrings.alignReceipt,
+                l10n.alignReceipt,
                 style: const TextStyle(
                   color: AppColors.onVivid,
                   fontSize: 14,

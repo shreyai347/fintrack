@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/widgets/category_icon.dart';
+import 'package:fintrack/core/utils/category_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/features/dashboard/view/widgets/budget_progress_bar.dart';
 import 'package:fintrack/features/transactions/model/category_model.dart';
@@ -23,6 +24,7 @@ class BudgetCategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final title = dark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
     final muted = dark ? AppColors.textMutedDark : AppColors.textMutedLight;
@@ -79,7 +81,7 @@ class BudgetCategoryTile extends StatelessWidget {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        category.name,
+                        localizedCategoryName(l10n, category.name),
                         style: TextStyle(
                           color: title,
                           fontWeight: FontWeight.w600,
@@ -110,7 +112,7 @@ class BudgetCategoryTile extends StatelessWidget {
                     ),
                     if (budget.isCritical && !budget.isOverBudget)
                       Text(
-                        AppStrings.almostFull,
+                        l10n.almostFull,
                         style: TextStyle(
                           color: dark ? AppColors.expense : AppColors.expenseLight,
                           fontSize: 11,
@@ -124,7 +126,7 @@ class BudgetCategoryTile extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        AppStrings.overBudget,
+                        l10n.overBudget,
                         style: TextStyle(
                           color: dark ? AppColors.expense : AppColors.expenseLight,
                           fontWeight: FontWeight.w800,

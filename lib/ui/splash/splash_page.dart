@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/config/app_routes.dart';
+import 'package:fintrack/core/constants/app_assets.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
 import 'package:fintrack/core/services/biometric/biometric_service.dart';
 import 'package:fintrack/core/services/storage/preferences_service.dart';
@@ -63,18 +64,25 @@ class _SplashPageState extends ConsumerState<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.account_balance_wallet,
-                size: 96,
-                color: AppColors.accentDark,
+              Image.asset(
+                AppAssets.splashLogo,
+                width: 200,
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.account_balance_wallet,
+                  size: 96,
+                  color: AppColors.accentDark,
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               Text(
-                l10n.appTitle,
+                l10n.splashTagline,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: AppColors.textPrimaryDark,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
+                  color: AppColors.textMutedDark,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  height: 1.35,
                 ),
               ),
               if (_authFailed) ...[

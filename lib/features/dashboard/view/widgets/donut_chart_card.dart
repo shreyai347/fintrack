@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fintrack/core/config/app_routes.dart';
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 import 'package:fintrack/core/utils/currency_formatter.dart';
 import 'package:fintrack/core/utils/date_formatter.dart';
 import 'package:fintrack/core/widgets/animated_card.dart';
@@ -88,6 +88,7 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
     required List<TransactionModel> txs,
     required CategoryModel? category,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final border = dark ? AppColors.borderDark : AppColors.borderLight;
     final input = dark ? AppColors.inputDark : AppColors.inputLight;
@@ -100,12 +101,12 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
     Widget body;
     if (segment.categoryId < 0) {
       body = Text(
-        AppStrings.dashboardDonutOthersDetail,
+        l10n.donutOthersDetail,
         style: TextStyle(color: muted, fontSize: 12, height: 1.35),
       );
     } else if (txs.isEmpty) {
       body = Text(
-        AppStrings.transactionsEmptyTitle,
+        l10n.transactionsEmptyTitle,
         style: TextStyle(color: muted, fontSize: 12),
       );
     } else {
@@ -143,7 +144,7 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
                             Text(
                               (t.note?.trim().isNotEmpty ?? false)
                                   ? t.note!.trim()
-                                  : AppStrings.transactionsListFallbackTitle,
+                                  : l10n.transactionsListFallbackTitle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -176,7 +177,7 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                '+${txs.length - preview.length} more',
+                l10n.donutMoreCount(txs.length - preview.length),
                 style: TextStyle(color: muted, fontSize: 11),
               ),
             ),
@@ -208,13 +209,13 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
             ),
             const SizedBox(height: 2),
             Text(
-              AppStrings.dashboardDonutCategoryExpenses,
+              l10n.donutCategoryExpenses,
               style: TextStyle(color: muted, fontSize: 11),
             ),
             if (segment.categoryId >= 0 && txs.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(
-                AppStrings.dashboardDonutOpenDetail,
+                l10n.donutOpenDetail,
                 style: TextStyle(color: muted, fontSize: 10),
               ),
             ],
@@ -227,7 +228,7 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
                 size: 18,
                 color: dark ? AppColors.accentDark : AppColors.accentLight,
               ),
-              label: Text(AppStrings.dashboardDonutSeeAllTransactions),
+              label: Text(l10n.donutSeeAllTransactions),
               style: TextButton.styleFrom(
                 alignment: Alignment.centerLeft,
                 foregroundColor:
@@ -243,6 +244,7 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = Theme.of(context).brightness == Brightness.dark;
     final track = dark ? AppColors.inputDark : AppColors.inputLight;
     final muted = dark ? AppColors.textMutedDark : AppColors.textMutedLight;
@@ -267,7 +269,7 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
       centerTop = s.label;
       centerBottom = CurrencyFormatter.format(s.amount);
     } else {
-      centerTop = AppStrings.dashboardDonutTopLabel;
+      centerTop = l10n.donutTopLabel;
       centerBottom = segments.first.label;
     }
 
@@ -371,7 +373,7 @@ class _DonutChartCardState extends ConsumerState<DonutChartCard> {
           ),
           const SizedBox(height: 8),
           Text(
-            AppStrings.dashboardDonutTapHint,
+            l10n.donutTapHint,
             style: TextStyle(color: muted, fontSize: 11),
           ),
           const SizedBox(height: 8),

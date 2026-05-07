@@ -3,7 +3,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:fintrack/core/constants/app_colors.dart';
-import 'package:fintrack/core/constants/app_strings.dart';
+import 'package:fintrack/l10n/app_localizations.dart';
 
 class QrShareWidget extends StatelessWidget {
   const QrShareWidget({super.key, required this.qrData});
@@ -12,6 +12,7 @@ class QrShareWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final title = Theme.of(context).brightness == Brightness.dark
         ? AppColors.textPrimaryDark
         : AppColors.textPrimaryLight;
@@ -22,7 +23,7 @@ class QrShareWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            AppStrings.scanToView,
+            l10n.scanToView,
             style: TextStyle(
               color: title,
               fontWeight: FontWeight.w600,
@@ -49,7 +50,7 @@ class QrShareWidget extends StatelessWidget {
             ),
             onPressed: () =>
                 SharePlus.instance.share(ShareParams(text: qrData)),
-            child: Text(AppStrings.shareSummary),
+            child: Text(l10n.shareSummary),
           ),
         ],
       ),
