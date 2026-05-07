@@ -7,7 +7,9 @@
 
 ## Table of Contents
 
+- [Download APK](#download-apk)
 - [Screenshots](#screenshots)
+- [Demo Video](#demo-video)
 - [Architecture Overview](#architecture-overview)
 - [Folder Structure](#folder-structure)
 - [Feature Architecture — MVVM + Repository](#feature-architecture)
@@ -23,11 +25,29 @@
 
 ---
 
+## Download APK
+
+**[Download app-release.apk (Google Drive)](https://drive.google.com/file/d/15GtgeaOrzM9yxZh1O_SoT801QrBgy6vb/view?usp=sharing)**
+
+Install on Android: open the APK from Downloads, allow install from that source if prompted, then open **FinTrack Pro**. For day-to-day installs, prefer builds you compile yourself (see [Building the APK](#building-the-apk)).
+
+---
+
 ## Screenshots
 
+Full-size captures on Google Drive:
+
 | Dashboard | Transactions | Budget | Settings |
-|-----------|-------------|--------|----------|
-| Dark & Light theme | 5-step add flow | Per-category limits | Biometric + l10n |
+|-----------|----------------|--------|----------|
+| [Open image](https://drive.google.com/file/d/15WXxDqWcotnQu5Ko_mkN9Jxy9cfcaqjw/view?usp=sharing) | [Open image](https://drive.google.com/file/d/16mdMGk8ZO5NVdwNfn_-HxkH_KFjRXaXH/view?usp=sharing) | [Open image](https://drive.google.com/file/d/1pkIFK75FAB1HHadDoZnMuEh__ljFv9XQ/view?usp=sharing) | [Open image](https://drive.google.com/file/d/1uqwpfNPSi2uH98KZ5aZJqTQ0gMqAHO8N/view?usp=sharing) |
+
+---
+
+## Demo Video
+
+**[Watch demo video (Google Drive)](https://drive.google.com/file/d/1LghvfCqqAZxQOOOQEwR3A4b9MS2HjPeX/view)**
+
+GitHub’s README renderer does not support embedded players for Google Drive (it strips `<iframe>` / most HTML video). The link above opens the recording in your browser. For an inline preview on the repo front page, upload the same clip to **YouTube** (or **GitHub Releases** as an asset) and we can add a standard embed or thumbnail link for that host.
 
 ---
 
@@ -475,9 +495,11 @@ flutter build apk --release \
   --no-tree-shake-icons
 ```
 
-APK location:
+APK output when you build locally:
 
 `build/app/outputs/flutter-apk/app-release.apk`
+
+**Pre-built APK (same artifact, hosted):** [app-release.apk on Google Drive](https://drive.google.com/file/d/15GtgeaOrzM9yxZh1O_SoT801QrBgy6vb/view?usp=sharing)
 
 > `--no-tree-shake-icons` is required because category icons use
 > runtime `IconData(codePoint)` loaded from the database.
